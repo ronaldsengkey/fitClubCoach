@@ -4,7 +4,7 @@ A Fit Club App
 
 ## Usage
 
-#### PhoneGap CLI
+#### Fit Club CLI
 
 The Fit Club App is a new workout management system.
 
