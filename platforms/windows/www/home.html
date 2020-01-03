@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -39,23 +39,21 @@
 	<link href="assets/css/style.css" rel="stylesheet">
 </head>
 
-<body id="profilePage">
+<body id="homepage" class="theme-blue bg-indigo" style="background:#484684 !important;">
 	<div style="margin:0px;padding:0px;position:fixed;background: #4568DC;
 background: -webkit-linear-gradient(to right, #B06AB3, #4568DC);
 background: linear-gradient(to right, #B06AB3, #4568DC);
 width:100%;height:100%; opacity: 0.8;">
 	</div>
-	<div
-		style="background:#fff;width:100%;position:absolute;min-height:100%;right:0px; left:0px;border-radius: 0 75rem 0px 0px;">
-	</div>
+
 	<div class="container-fluid">
 		<div style="position:fixed;z-index:999;width:100%;top:0px;right:0px;left:0px;">
 			<nav class="navbar navbar-dark navbar-2 purple-gradient col-12">
 
 				<!-- Navbar brand -->
-				<a class="navbar-brand" href="home.html"><i class="fas fa-angle-left"></i></a>
+				<a class="navbar-brand" data-target="index" data-uri="read" data-filter="index">Logout</a>
 				<center>
-					<h5 class="text-white">Profile</h5>
+					<h5 class="text-white">Home</h5>
 				</center>
 				<!-- Collapse button -->
 				<button class="navbar-toggler collapsed col-2" type="button" data-toggle="collapse"
@@ -71,8 +69,9 @@ width:100%;height:100%; opacity: 0.8;">
 					<!-- Links -->
 					<ul class="navbar-nav mr-auto">
 						<li class="nav-item active">
-							<a class="nav-link waves-effect waves-light" href="#"><i
-									class="fas fa-user-alt"></i>&nbsp;Profile <span class="sr-only">(current)</span></a>
+							<a class="nav-link waves-effect waves-light" data-target="profile" data-uri="view"
+								data-filter="profile"><i class="fas fa-user-alt"></i>&nbsp;Profile <span
+									class="sr-only">(current)</span></a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link waves-effect waves-light" href="#"><i
@@ -86,110 +85,44 @@ width:100%;height:100%; opacity: 0.8;">
 
 			</nav>
 		</div>
-		<div style="width:80%;margin:0px auto;padding-top:20%;" class="mb-4">
-			<div class="row mb-3">
-				<div class="col-12">
-					<!-- Avatar -->
-					<div class="avatar mx-auto text-center">
-						<img src="https://mdbootstrap.com/img/Photos/Avatars/img%20%2810%29.jpg" style="max-width:37%;"
-							class="rounded-circle mb-3" alt="woman avatar">
-						<!-- Name -->
-						<h4 class="card-title" id="profName"></h4>
-					</div>
-				</div>
-			</div>
-			<div class="row mb-3">
-				<div class="col-12">
-					<h6 class="grey-text mb-3"><strong><span class="fa fa-home"></span>&nbsp;Address &nbsp;
-							:</strong>&nbsp;<span id="profAddr"></span></h6>
-					<h6 class="grey-text mb-3"><strong><span class="fa fa-envelope"></span>&nbsp;Email &nbsp;
-							:</strong>&nbsp;<span id="profEmail"></span></h6>
-					<h6 class="grey-text mb-3"><strong><span class="fa fa-phone"></span>&nbsp;Phone &nbsp;
-							:</strong>&nbsp;<span id="profPhone"></span></h6>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-12 text-center">
-					<i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
-						class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
+
+		<div class="row" style="padding-top:58px;">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-sm-12 text-justify" style="padding:0px;">
+				<div class="text-center">
+					<img src="https://cdn.shpe.us/blog/wp-content/uploads/sites/5/2019/02/49679201_1983805585258377_6153898456404246478_n.jpg"
+						style="width:100%;opacity: 0.3;">
+					<!-- <h3 id="titleClass">Class Title</h3>
+				<small>schedule date</small> -->
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-12">
-				<button type="button" class="btn btn-primary btn-block" data-toggle="modal"
-					data-target="#modalPoll-1">Edit profile</button>
+		<!-- container card -->
+		<div
+			style="background:#fff;width:100%;position:absolute;min-height:100%;right:0px; left:0px;top:220px;border-radius: 0 15rem 0px 0px;">
+			<div style="width:90%;margin:0px auto;margin-top:-9%;z-index:3;">
+				<img src="https://uploads-ssl.webflow.com/5d1f053cee3b9da3d699a858/5d2aaced187e9368f0c098c9_gym.svg"
+					class="mt-5" style="width:55%">
+
 			</div>
 		</div>
-
-		<!-- Modal: modalPoll -->
-		<div class="modal fade right" id="modalPoll-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-			aria-hidden="true" data-backdrop="false">
-			<div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-				<div class="modal-content">
-					<!--Header-->
-					<div class="modal-header purple-gradient">
-						<p class="heading lead">Edit profile
-						</p>
-
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true" class="white-text">×</span>
-						</button>
-					</div>
-
-					<!--Body-->
-					<div class="modal-body">
-						<div class="text-center">
-							<i class="far fa-user-circle fa-4x mb-3 animated rotateIn text-primary"></i>
-
-							<form class="md-form">
-								<div class="file-field">
-									<div class="d-flex justify-content-center">
-										<div class="btn btn-mdb-color btn-rounded float-left">
-											<span>Add photo</span>
-											<input type="file">
-										</div>
-									</div>
-								</div>
-							</form>
-							<!-- Material input -->
-							<div class="md-form">
-								<input type="text" id="form2" class="form-control">
-								<label for="form2">Name</label>
-							</div>
-							<div class="md-form">
-								<input type="text" id="form2" class="form-control">
-								<label for="form2">Email</label>
-							</div>
-							<div class="md-form">
-								<input type="text" id="form3" class="form-control">
-								<label for="form3">Phone</label>
-							</div>
-							<!--Basic textarea-->
-							<div class="md-form">
-								<textarea type="text" id="form79textarea" class="md-textarea form-control"
-									rows="3"></textarea>
-								<label for="form79textarea">Address</label>
-							</div>
-
-						</div>
-
-						<!--Footer-->
-						<div class="modal-footer justify-content-center">
-							<a type="button" class="btn btn-primary waves-effect waves-light">Send
-								<i class="fa fa-paper-plane ml-1"></i>
-							</a>
-							<a type="button" class="btn btn-outline-purple waves-effect" data-dismiss="modal">Cancel</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Modal: modalPoll -->
-
-
+		<div style="position:fixed;z-index:999;width:100%;bottom:0px;right:0px;left:0px;">
+			<ul class="nav nav-tabs nav-justified md-tabs indigo navRadiusNone" id="myTabJust" role="tablist">
+				<li class="nav-item waves-effect waves-light">
+					<!-- <a class="nav-link" id="home-tab-just" data-toggle="tab" href="#home-just" role="tab" aria-controls="home-just" aria-selected="true"><i class="fas fa-calendar-alt"></i></a> -->
+					<a class="nav-link" href="addCoachSchedule.html"><i class="fas fa-calendar-alt"></i></a>
+				</li>
+				<li class="nav-item waves-effect waves-light">
+					<a class="nav-link active" href="#"><i class="fas fa-history"></i></a>
+				</li>
+				<li class="nav-item waves-effect waves-light">
+					<a class="nav-link" href="#"><i class="fas fa-chart-line"></i></a>
+				</li>
+			</ul>
 		</div>
+		<!-- end container card -->
+	</div>
+
 </body>
-
 <!-- JQuery -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <!-- Bootstrap tooltips -->

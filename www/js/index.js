@@ -45,5 +45,9 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+    },
+    onerror:function (err, fileName, lineNumber) {
+        // alert or console.log a message
+        alert(fileName, 'Line:', lineNumber, 'Error:', e.message);
     }
 };

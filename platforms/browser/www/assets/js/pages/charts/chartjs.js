@@ -1,8 +1,19 @@
 $(function () {
-    new Chart(document.getElementById("line_chart").getContext("2d"), getChartJs('line'));
-    new Chart(document.getElementById("bar_chart").getContext("2d"), getChartJs('bar'));
-    new Chart(document.getElementById("radar_chart").getContext("2d"), getChartJs('radar'));
-    new Chart(document.getElementById("pie_chart").getContext("2d"), getChartJs('pie'));
+    if($('#line_chart').length > 0){
+        new Chart(document.getElementById("line_chart").getContext("2d"), getChartJs('line'));
+    }
+    if($('#bar_chart').length > 0){
+        new Chart(document.getElementById("bar_chart").getContext("2d"), getChartJs('bar'));
+    }
+    if($('#radar_chart').length > 0){
+        new Chart(document.getElementById("radar_chart").getContext("2d"), getChartJs('radar'));
+    }
+    if($('#pie_chart').length > 0){
+        new Chart(document.getElementById("pie_chart").getContext("2d"), getChartJs('pie'));
+    }
+    if($('#doughnut_chart').length > 0){
+        new Chart(document.getElementById("doughnut_chart").getContext("2d"), getChartJs('doughnut'));
+    }
 });
 
 function getChartJs(type) {
@@ -34,6 +45,32 @@ function getChartJs(type) {
             options: {
                 responsive: true,
                 legend: false
+            }
+        }
+    } else if(type === 'doughnut'){
+        config = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [10, 20, 30],
+                    backgroundColor : ['red','yellow','blue']
+                }],
+            
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: [
+                    'Red',
+                    'Yellow',
+                    'Blue'
+                ]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    display: true,
+                    labels: {
+                        fontColor: 'rgb(255, 99, 132)'
+                    }
+                }
             }
         }
     }
