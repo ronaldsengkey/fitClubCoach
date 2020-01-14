@@ -36,16 +36,18 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
 
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.css" rel="stylesheet">
+	
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
 	<link href="assets/css/style.css" rel="stylesheet">
+	<!-- <link href="css/index.css" rel="stylesheet"> -->
 </head>
 
-<body id="homepage" class="theme-blue bg-indigo" style="background:#484684 !important;">
+<body id="schedulePage" class="theme-blue bg-indigo" style="background:#484684 !important;">
 	<div style="margin:0px;padding:0px;position:fixed;background: #4568DC;
 background: -webkit-linear-gradient(to right, #B06AB3, #4568DC);
 background: linear-gradient(to right, #B06AB3, #4568DC);
 width:100%;height:100%; opacity: 0.8;">
 	</div>
-
 	<div class="container-fluid">
 		<div style="position:fixed;z-index:999;width:100%;top:0px;right:0px;left:0px;">
 			<nav class="navbar navbar-dark navbar-2 purple-gradient col-12">
@@ -53,7 +55,7 @@ width:100%;height:100%; opacity: 0.8;">
 				<!-- Navbar brand -->
 				<a class="navbar-brand" data-target="index" data-uri="read" data-filter="index">Logout</a>
 				<center>
-					<h5 class="text-white">Add Schedule</h5>
+					<h5 class="text-white">My Schedule</h5>
 				</center>
 				<!-- Collapse button -->
 				<button class="navbar-toggler collapsed col-2" type="button" data-toggle="collapse"
@@ -102,43 +104,26 @@ width:100%;height:100%; opacity: 0.8;">
 			<div style="width:90%;margin:0px auto;margin-top:-9%;z-index:3;">
 				<img src="https://uploads-ssl.webflow.com/5d1f053cee3b9da3d699a858/5d2aaced187e9368f0c098c9_gym.svg"
 					class="mt-5" style="width:55%">
-				<div class="row">
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<div class="clearfix"></div><br>
-						<label>Class</label>
-						<select class="form-control" id="classOptionList">
-							<option></option>
-						</select>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<div class="clearfix"></div><br>
-						<label><i class="fa fa-calendar"></i>&nbsp;Date</label>
-						<input type="text" data-format="Y-m-d" class="form-control datePicker" id="classDate">
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-						<div class="clearfix"></div><br>
-						<label><i class="fa fa-clock-o"></i>&nbsp;Start Time</label>
-						<input type="text" class="form-control timePicker" id="startTime">
-					</div>
-					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-						<div class="clearfix"></div><br>
-						<label><i class="fa fa-clock-o"></i>&nbsp;End Time</label>
-						<input type="text" class="form-control timePicker" id="endTime">
-					</div>
-				</div>
-				<div class="clearfix"></div><br>
-				<div class="row">
-					<div class="col-lg-12 col-xs-12 text-center">
-						<button type="button" data-uri="create" data-target="class" data-filter="coachSchedule"
-							class="btn btn-lg bg-gradient text-white">Add Schedule</button>
-					</div>
-				</div>
+				
 			</div>
 		</div>
+
+		<!-- <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+			<a class="btn-floating btn-lg red">
+			  <i class="fas fa-pencil-alt"></i>
+			</a>
+		  </div>
+		  <button type="button" class="btn pmd-btn-fab pmd-ripple-effect btn-secondary"><i class="material-icons pmd-sm">add_shopping_cart</i></button> -->
+		
+		  <div class="fixed-action-btn">
+			<a class="btn-floating btn-large red" href="addCoachSchedule.html">
+			  <i class="large material-icons">mode_edit</i>
+			</a>
+			<ul>
+			  <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
+			</ul>
+		  </div>
+
 		<div style="position:fixed;z-index:999;width:100%;bottom:0px;right:0px;left:0px;">
 			<ul class="nav nav-tabs nav-justified md-tabs indigo navRadiusNone" id="myTabJust" role="tablist">
 				<li class="nav-item waves-effect waves-light">
@@ -159,16 +144,25 @@ width:100%;height:100%; opacity: 0.8;">
 </body>
 <!-- JQuery -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<!-- Bootstrap tooltips -->
+
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<!-- Bootstrap core JavaScript -->
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js">
 </script>
-<!-- MDB core JavaScript -->
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js"></script>
+
+
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.js"></script>
 <script type="text/javascript" src="assets/js/script.js"></script>
 <script src="assets/js/onFunction.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<!-- <script src="js/index.js"></script> -->
+<script>
+$(document).ready(function(){
+    $('.fixed-action-btn').floatingActionButton();
+  });
+</script>
 </html>
