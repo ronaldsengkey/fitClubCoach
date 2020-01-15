@@ -37,6 +37,7 @@
 
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.css" rel="stylesheet">
 	<link href="assets/css/style.css" rel="stylesheet">
+	<link href="assets/css/clockpicker.css" rel="stylesheet">
 </head>
 
 <body id="homepage" class="theme-blue bg-indigo" style="background:#484684 !important;">
@@ -51,7 +52,7 @@ width:100%;height:100%; opacity: 0.8;">
 			<nav class="navbar navbar-dark navbar-2 purple-gradient col-12">
 
 				<!-- Navbar brand -->
-				<a class="navbar-brand" data-target="index" data-uri="read" data-filter="index">Logout</a>
+				<a class="navbar-brand" href="schedule.html"><i class="fas fa-angle-left"></i></a>
 				<center>
 					<h5 class="text-white">Add Schedule</h5>
 				</center>
@@ -122,12 +123,24 @@ width:100%;height:100%; opacity: 0.8;">
 					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 						<div class="clearfix"></div><br>
 						<label><i class="fa fa-clock-o"></i>&nbsp;Start Time</label>
-						<input type="text" class="form-control timePicker" id="startTime">
+						<!-- <input type="text" class="form-control timePicker" id="startTime"> -->
+						<div class="input-group clockpicker">
+							<input type="text" class="form-control" id="startTime" value="09:30">
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-time"></span>
+							</span>
+						</div>
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 						<div class="clearfix"></div><br>
 						<label><i class="fa fa-clock-o"></i>&nbsp;End Time</label>
-						<input type="text" class="form-control timePicker" id="endTime">
+						<!-- <input type="text" class="form-control timePicker" id="endTime"> -->
+						<div class="input-group clockpicker">
+							<input type="text" class="form-control" id="endTime" value="09:30">
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-time"></span>
+							</span>
+						</div>
 					</div>
 				</div>
 				<div class="clearfix"></div><br>
@@ -170,5 +183,39 @@ width:100%;height:100%; opacity: 0.8;">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.js"></script>
 <script type="text/javascript" src="assets/js/script.js"></script>
 <script src="assets/js/onFunction.js"></script>
-
+<script src="assets/js/clockpicker.js"></script>
+<script>
+	// $( "#demo" ).dateDropper();
+	
+	$(function() {
+		let d = new Date(),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear(),
+			today = year + "-" + month + "-" + day;
+		$('#classDate').val(today);
+		$('.clockpicker').clockpicker();
+	})
+	$( "#classDate" ).dateDropper({
+			animate: true,
+			// bounce, dropDown
+			init_animation: "fadein",
+			format: "Y-m-d",
+			lang: "en",
+			// Set the initial value to current date or lock the control value to current date
+			// false(default), from, to.
+			lock: false,
+			minYear: 1970,
+			yearsRange: 10,
+			//CSS PRIOPRIETIES
+			dropPrimaryColor: "#6561bf",
+			dropTextColor: "#333333",
+			dropBackgroundColor: "#FFFFFF",
+			dropBorder: "1px solid #4760ca",
+			dropBorderRadius: 8,
+			dropShadow: "0 0 10px 0 rgb(145, 98, 173)",
+			dropWidth: 124,
+			dropTextWeight: 'bold'
+		});
+</script>
 </html>
