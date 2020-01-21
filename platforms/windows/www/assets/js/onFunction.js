@@ -2,6 +2,11 @@
 	$('#bodyProgress').modal('show');
 }))
 
+$(document).on('click','.classSchedule',(function(e){
+	var idClass = $(this).data('id');	
+	window.location.href="scheduleDetail.html?id=" + idClass;
+}))
+
 $(document).on('submit','#imgProfile',(function(e) {
 	e.preventDefault();
 	var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
