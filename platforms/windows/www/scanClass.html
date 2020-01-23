@@ -98,18 +98,27 @@ width:100%;height:100%; opacity: 0.8;">
 			</div>
 		</div>
 		<!-- container card -->
-		<div
-			style="background:#fff;width:100%;position:absolute;min-height:100%;right:0px; left:0px;top:220px;border-radius: 0 15rem 0px 0px;">
+		<div style="background:#fff;width:100%;position:absolute;min-height:100%;right:0px; left:0px;top:220px;border-radius: 0 15rem 0px 0px;">
 			<div style="width:90%;margin:0px auto;margin-top:-9%;z-index:3;">
 				<img src="https://uploads-ssl.webflow.com/5d1f053cee3b9da3d699a858/5d2aaced187e9368f0c098c9_gym.svg"
 					class="mt-5" style="width:55%">
 				<div class="row">
 					<div class="col-12">
-						<h6>ini scan class</h6>
+						<button onclick="getPhotoFromCamera()">Launch Camera</button> 
+						<button onclick="getPhotoFromAlbum()">Goto Picture Gallery</button> 
+						<div> 
+							<img id="image" style="display:none;width:290px;height:210px;" src = ""/> 
+						</div> 
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<!-- <div class="fixed-action-btn">
+			<a class="btn-floating btn-large red cameraScan">
+				<i class="large material-icons">camera_alt</i>
+			</a>
+		</div> -->
 
 		<div style="position:fixed;z-index:999;width:100%;bottom:0px;right:0px;left:0px;">
 			<ul class="nav nav-tabs nav-justified md-tabs indigo navRadiusNone" id="myTabJust" role="tablist">
@@ -147,10 +156,87 @@ width:100%;height:100%; opacity: 0.8;">
 <script src="assets/js/onFunction.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <!-- <script src="js/index.js"></script> -->
+<script type="javascript" src="assets/js/cordova.js"></script>
 <script>
 	$(document).ready(function () {
 		$('.fixed-action-btn').floatingActionButton();
 	});
 </script>
+<script type="text/javascript"> 
+
+	function getPhotoFromCamera() { 
+			navigator.camera.getPicture(onPhotoDataSuccess, onFail, { 
+			quality: 50, 
+			sourceType: navigator.camera.PictureSourceType.CAMERA, 
+			destinationType: navigator.camera.DestinationType.DATA_URL, 
+		}); 
+	} 
+	function onPhotoDataSuccess(imageData){ 
+		var image = document.getElementById('image'); 
+		image.style.display = 'block'; 
+		image.src = "data:image/jpeg;base64,"+imageData; 
+	} 
+	function getPhotoFromAlbum(){ 
+		navigator.camera.getPicture(onPhotoURISuccess, onFail,{ 
+			quality: 50, 
+			sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM, 
+			destinationType: navigator.camera.DestinationType.FILE_URI 
+		}); 
+	} 
+	function onPhotoURISuccess(imageURI){ 
+		var image = document.getElementById('image'); 
+		image.style.display = 'block'; 
+		image.src = imageURI; 
+	} 
+	function onFail(message){ 
+		alert('Failed because:' + message); 
+	}
+	document.addEventListener("deviceready", function(){
+		console.log(navigator); // here you can check all plugins
+	}); 
+</script> 
+
+<!-- <script>
+	var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value 
+
+    // Wait for Cordova to connect with the device
+    //
+    document.addEventListener("deviceready",onDeviceReady,false);
+
+    // Cordova is ready to be used!
+    //
+    function onDeviceReady() {
+		alert('device ready');
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+	}
+	
+	$(document).on('click','.cameraScan',(function(e){	
+		navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
+	}))
+
+	function onPhotoDataSuccess(imageData) {
+		// Uncomment to view the base64 encoded image data
+		// console.log(imageData);
+
+		// Get image handle
+		//
+		var smallImage = document.getElementById('smallImage');
+
+		// Unhide image elements
+		//
+		smallImage.style.display = 'block';
+
+		// Show the captured photo
+		// The inline CSS rules are used to resize the image
+		//
+		smallImage.src = "data:image/jpeg;base64," + imageData;
+	}
+
+	function onFail(message) {
+      alert('Failed because: ' + message);
+    }
+</script> -->
 
 </html>
