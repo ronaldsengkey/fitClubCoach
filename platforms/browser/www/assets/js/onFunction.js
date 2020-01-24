@@ -29,6 +29,11 @@ $(document).on('change','#classChoose',(function(e){
 	$('.coachContain').append(switchClass);
 }));
 
+$(document).on('change','#coachChoose',(function(e){
+	let btnChoose = '<button class="btn btn-block btn-success btn-indigo waves-effect waves-light">Switch</button>';
+	$('.btnSwitch').append(btnChoose);
+}));
+
 
 $(document).on('submit','#imgProfile',(function(e) {
 	e.preventDefault();
