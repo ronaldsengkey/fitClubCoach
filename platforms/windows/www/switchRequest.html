@@ -36,26 +36,24 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/css/mdb.min.css" rel="stylesheet">
 
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.css" rel="stylesheet">
-
-	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
 	<link href="assets/css/style.css" rel="stylesheet">
-	<!-- <link href="css/index.css" rel="stylesheet"> -->
 </head>
 
-<body id="scheduleDetailPage" class="theme-blue bg-indigo" style="background:#484684 !important;">
+<body id="switchRequestPage" class="theme-blue bg-indigo" style="background:#484684 !important;">
 	<div style="margin:0px;padding:0px;position:fixed;background: #4568DC;
 background: -webkit-linear-gradient(to right, #B06AB3, #4568DC);
 background: linear-gradient(to right, #B06AB3, #4568DC);
 width:100%;height:100%; opacity: 0.8;">
 	</div>
+
 	<div class="container-fluid">
 		<div style="position:fixed;z-index:999;width:100%;top:0px;right:0px;left:0px;">
 			<nav class="navbar navbar-dark navbar-2 purple-gradient col-12">
 
 				<!-- Navbar brand -->
-				<a class="navbar-brand" href="schedule.html"><i class="fas fa-angle-left"></i></a>
+				<a class="navbar-brand" data-target="index" data-uri="read" data-filter="index">Logout</a>
 				<center>
-					<h5 class="text-white">Schedule Detail</h5>
+					<h5 class="text-white">Switch Request</h5>
 				</center>
 				<!-- Collapse button -->
 				<button class="navbar-toggler collapsed col-2" type="button" data-toggle="collapse"
@@ -93,8 +91,8 @@ width:100%;height:100%; opacity: 0.8;">
 				<div class="text-center">
 					<img src="https://cdn.shpe.us/blog/wp-content/uploads/sites/5/2019/02/49679201_1983805585258377_6153898456404246478_n.jpg"
 						style="width:100%;opacity: 0.3;">
+					<h4>Switch Request</h4>
 				</div>
-
 			</div>
 		</div>
 		<!-- container card -->
@@ -103,47 +101,20 @@ width:100%;height:100%; opacity: 0.8;">
 			<div style="width:90%;margin:0px auto;margin-top:-9%;z-index:3;">
 				<img src="https://uploads-ssl.webflow.com/5d1f053cee3b9da3d699a858/5d2aaced187e9368f0c098c9_gym.svg"
 					class="mt-5" style="width:55%">
-				<div class="row">
-					<div class="col-12">
-						<h6>ini schedule detail</h6>
-					</div>
-				</div>
+
 			</div>
 		</div>
-
-		<div class="fixed-action-btn-left">
-			<a class="btn-floating btn-large red" href="switchSchedule.html">
-				<i class="large material-icons">swap_horiz</i>
-			</a>
-		</div>
-
-		<div class="fixed-action-btn">
-			<a class="btn-floating btn-large red" href="scanClass.html">
-				<i class="large material-icons">camera_alt</i>
-			</a>
-		</div>
-
-		<div class="row">
-			<div class="col-12 col-lg-12">			
-				<div class="d-flex flex-column" style="position:fixed;bottom:40px;right:0px;left:0px;width:100%;">
-					<button class="btn btn-block btn-success btn-indigo waves-effect waves-light">
-						Open Class
-					</button>
-				</div>
-			</div>
-		</div>
-
 		<div style="position:fixed;z-index:999;width:100%;bottom:0px;right:0px;left:0px;">
 			<ul class="nav nav-tabs nav-justified md-tabs indigo navRadiusNone" id="myTabJust" role="tablist">
 				<li class="nav-item waves-effect waves-light">
 					<!-- <a class="nav-link" id="home-tab-just" data-toggle="tab" href="#home-just" role="tab" aria-controls="home-just" aria-selected="true"><i class="fas fa-calendar-alt"></i></a> -->
-					<a class="nav-link active" href="#"><i class="fas fa-calendar-alt"></i></a>
+					<a class="nav-link" href="schedule.html"><i class="fas fa-calendar-alt"></i></a>
 				</li>
 				<li class="nav-item waves-effect waves-light">
 					<a class="nav-link" href="home.html"><i class="fas fa-history"></i></a>
 				</li>
 				<li class="nav-item waves-effect waves-light">
-					<a class="nav-link" href="#"><i class="fas fa-chart-line"></i></a>
+					<a class="nav-link active" href="#"><i class="fas fa-chart-line"></i></a>
 				</li>
 			</ul>
 		</div>
@@ -153,26 +124,16 @@ width:100%;height:100%; opacity: 0.8;">
 </body>
 <!-- JQuery -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-
-
+<!-- Bootstrap tooltips -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-
+<!-- Bootstrap core JavaScript -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js">
 </script>
-
+<!-- MDB core JavaScript -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.0/js/mdb.min.js"></script>
-
-
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.js"></script>
 <script type="text/javascript" src="assets/js/script.js"></script>
 <script src="assets/js/onFunction.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<!-- <script src="js/index.js"></script> -->
-<script>
-	$(document).ready(function () {
-		$('.fixed-action-btn').floatingActionButton();
-	});
-</script>
 
 </html>

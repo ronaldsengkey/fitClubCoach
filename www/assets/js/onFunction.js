@@ -7,6 +7,28 @@ $(document).on('click','.classSchedule',(function(e){
 	window.location.href="scheduleDetail.html?id=" + idClass;
 }))
 
+$(document).on('change','#classSwitchDate',(function(e){
+	let switchClass = '<div class="row">'+
+	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
+		'<div class="clearfix"></div><br>'+
+		'<label><i class="fa fa-calendar"></i>&nbsp;Class</label>'+
+		'<select id="classChoose" class="form-control"><option selected></option><option>Isi class</option></select>';
+		'</div>'+
+	'</div>';
+	$('.classContain').append(switchClass);
+}));
+
+$(document).on('change','#classChoose',(function(e){
+	let switchClass = '<div class="row">'+
+	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
+		'<div class="clearfix"></div><br>'+
+		'<label><i class="fa fa-calendar"></i>&nbsp;Coach</label>'+
+		'<select id="coachChoose" class="form-control"><option selected></option><option>Isi coach</option></select>';
+		'</div>'+
+	'</div>';
+	$('.coachContain').append(switchClass);
+}));
+
 
 $(document).on('submit','#imgProfile',(function(e) {
 	e.preventDefault();
