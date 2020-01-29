@@ -136,13 +136,13 @@ $(document).on('click','button, a',function(){
 			if(filter == 'confirmCode' && target == 'user'){
 				data = {'token':12345678,'filter':filter,'verificationCode':$('#verificationCode').val(),'dataId':$(this).data('id')}
 			}else if(filter == 'login'){
-				// data = {'email':$('#email').val(),'password':$('#password').val()}
-				window.location.href="home.html";
+				data = {'email':$('#email').val(),'password':$('#password').val()}
+				// window.location.href="home.html";
 			} else if(filter == 'index'){
 				logout();
 			}
 			// console.log("check data =>", JSON.stringify(data));
-			// postData(uri,target,data);
+			postData(uri,target,data);
 		}else if(uri == 'update'){
 			if(filter == 'resendCode' && target == 'user'){
 				data = {'token':12345678,'filter':filter,'dataId':$(this).data('id')}

@@ -1,4 +1,4 @@
-﻿var urlService = 'http://localhost:8888/ronaldSengkey/fitClub/api/v1';
+﻿var urlService = 'http://192.168.0.44:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
 var fieldPswdInput = '<input type="password" class="form-control fieldPswd">';
@@ -10,15 +10,16 @@ var backBtn = '<button type="button" id="backBtn" data-target="index" style="pos
 $(function () {
 	if ($('#loginPage').length > 0) {
 		validate('login');
-		// $('body').append(backBtn);
-		// controlBackBtn('registration');
 	}
 	if ($('#registerPage').length > 0) {
-		// $('body').append(backBtn);
-		// controlBackBtn('index');
 		validate();
 		select2Activated();
 	}
+	if($('#addSchedulePage').length > 0){
+		validate('addSchedule');
+	}
+	var userData = parseUserData();
+	console.log('user data',userData);
 	setTimeout(function () {
 		$('.page-loader-wrapper').fadeOut(400, "linear");
 	}, 300);
@@ -76,12 +77,21 @@ function loadingDeactive() {
 	$('.page-loader-wrapper').fadeOut(400, "linear");
 }
 
+function parseUserData(){
+	let dataProfile = JSON.parse(localStorage.getItem("dataProfile"));
+	return dataProfile;
+}
+
 function validate(param) {
 	let dataProfile = JSON.parse(localStorage.getItem("dataProfile"));
 	if (dataProfile) {
 		switch (param) {
 			case "login":
 				window.location = "home.html";
+				break;
+			case "addSchedule":
+				// getClassData();
+				getData('classList',"all");
 				break;
 		}
 	} else {
@@ -100,6 +110,10 @@ function callModal(content) {
 	$('.modal-body').html(content);
 }
 
+function appendClassList(data,index){
+	let classHtml = '<option value='+data.id+'>'+data.name+'</option>';
+	$('#classOptionList').append(classHtml);
+}
 
 function getData(param, extraParam) {
 	let profile = JSON.parse(localStorage.getItem('dataProfile'));
@@ -108,41 +122,73 @@ function getData(param, extraParam) {
 		case "memberClass":
 			directory += '/class/memberClass/' + profile.data.accessToken;
 			break;
+		case "addSchedule":
+			directory += '/class/' + profile.data.accessToken;
+			break;
 	}
-	$.ajax({
-		url: directory,
-		crossDomain: true,
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-			"Accept": "*/*",
-			"Cache-Control": "no-cache",
-			"Accept-Encoding": "gzip, deflate",
-			"Connection": "keep-alive",
-		},
-		timeout: 8000,
-		success: function (callback) {
-			switch (callback.responseCode) {
-				case "401":
-					logout();
-					break;
-				case "404":
-					if (param == 'memberClass') {
-						appendEmptyClass();
-					} else {
-						alert(callback.responseMessage);
-					}
-					break;
-				case "200":
-					if (param == 'classList') {
-						callback.data.forEach(appendClassData);
-					} else if (param == 'classDetail') {
-						domClassDetail(callback.data[0]);
-					}
-					break;
+	if(param == 'addSchedule'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"Accept-Encoding": "gzip, deflate",
+				"Connection": "keep-alive",
+				"param":extraParam
+			},
+			timeout: 8000,
+			success: function (callback) {
+				switch (callback.responseCode) {
+					case "401":
+						logout();
+						break;
+					case "404":
+						break;
+					case "200":
+						callback.data.forEach(appendClassList);
+						break;
+				}
 			}
-		}
-	})
+		})
+	} else {
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"Accept-Encoding": "gzip, deflate",
+				"Connection": "keep-alive",
+			},
+			timeout: 8000,
+			success: function (callback) {
+				switch (callback.responseCode) {
+					case "401":
+						logout();
+						break;
+					case "404":
+						if (param == 'memberClass') {
+							appendEmptyClass();
+						} else {
+							alert(callback.responseMessage);
+						}
+						break;
+					case "200":
+						if (param == 'classList') {
+							callback.data.forEach(appendClassData);
+						} else if (param == 'classDetail') {
+							domClassDetail(callback.data[0]);
+						}
+						break;
+				}
+			}
+		})
+	}
 }
 
 function postData(uri, target, dd) {
@@ -158,14 +204,18 @@ function postData(uri, target, dd) {
 				'Content-Type': 'application/json'
 			},
 			success: function (callback) {
+				loadingDeactive();
 				switch (callback.responseCode) {
 					case "200":
 						notification(200, "Login success");
+						localStorage.setItem("dataProfile", JSON.stringify(callback.data));
+						window.location.href = 'home.html';
+						break;
+					default:
+						notification(500, "Login failed");
 						break;
 				}
-				loadingDeactive();
-				localStorage.setItem("dataProfile", JSON.stringify(callback.data));
-				window.location.href = 'home.html';
+				
 			},
 			error: function () {
 				loadingDeactive();
