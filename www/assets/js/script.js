@@ -1,4 +1,4 @@
-﻿var urlService = 'http://192.168.0.44:8888/ronaldSengkey/fitClub/api/v1';
+﻿var urlService = 'http://192.168.0.51:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
 var fieldPswdInput = '<input type="password" class="form-control fieldPswd">';
@@ -14,6 +14,10 @@ $(function () {
 	if ($('#registerPage').length > 0) {
 		validate();
 		select2Activated();
+	}
+	if($('#trainerRegistPage').length > 0){
+		validate('trainerRegist');
+		validate('getPlace');
 	}
 	if($('#addSchedulePage').length > 0){
 		validate('addSchedule');
@@ -84,19 +88,34 @@ function parseUserData(){
 
 function validate(param) {
 	let dataProfile = JSON.parse(localStorage.getItem("dataProfile"));
+	let directory = urlService;
 	if (dataProfile) {
 		switch (param) {
 			case "login":
 				window.location = "home.html";
 				break;
 			case "addSchedule":
-				// getClassData();
 				getData('classList',"all");
 				break;
 		}
 	} else {
 		// logout();
+		switch(param){
+			default:
+				getData(param,"all");
+				break;
+		}
 	}
+}
+
+function appendSpecialization(data,index){
+	let specHtml = '<option value='+data.id+'>'+data.name+'</option>';
+	$('#classTrain').append(specHtml);
+}
+
+function appendGetPlace(data,index){
+	let placeHtml = '<option value='+data.id+'>'+data.name+'</option>';
+	$('#placeId').append(placeHtml);
 }
 
 function callModal(content) {
@@ -125,8 +144,88 @@ function getData(param, extraParam) {
 		case "addSchedule":
 			directory += '/class/' + profile.data.accessToken;
 			break;
+		case "trainerRegist":
+			directory += '/class/x';
+			break;
+		case "getPlace":
+			directory += '/place/x';
+			break;
 	}
-	if(param == 'addSchedule'){
+	if(param == 'trainerRegist'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"param" :"all"
+			},
+			timeout: 8000,
+			tryCount: 0,
+			retryLimit: 3,
+			success: function (callback) {
+				console.log('kembalian', callback);
+				console.log('kembalian p', param);
+				console.log('kembalian d', directory);
+				switch (callback.responseCode) {
+					case "500":
+						this.tryCount++;
+						if (this.tryCount < this.retryLimit) {
+							$.ajax(this);
+						}
+						break;
+					case "401":
+						logout();
+						break;
+					case "404":
+						notification(500,'data not found');
+						break;
+					case "200":
+						callback.data.forEach(appendSpecialization);
+						break;
+				}
+			}
+		})
+	} else if(param == 'getPlace'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"param" :"all"
+			},
+			timeout: 8000,
+			tryCount: 0,
+			retryLimit: 3,
+			success: function (callback) {
+				console.log('kembalian', callback);
+				console.log('kembalian p', param);
+				console.log('kembalian d', directory);
+				switch (callback.responseCode) {
+					case "500":
+						this.tryCount++;
+						if (this.tryCount < this.retryLimit) {
+							$.ajax(this);
+						}
+						break;
+					case "401":
+						logout();
+						break;
+					case "404":
+						notification(500,'data not found');
+						break;
+					case "200":
+						callback.data.forEach(appendGetPlace);
+						break;
+				}
+			}
+		})
+	} else if(param == 'addSchedule'){
 		$.ajax({
 			url: directory,
 			crossDomain: true,

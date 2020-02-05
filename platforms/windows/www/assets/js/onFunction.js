@@ -128,7 +128,7 @@ $(document).on('click','button, a',function(){
 		if(uri == 'create'){
 			if(filter == 'trainerRegister' && target == 'user'){
 				data = {'filter':'coach','name':$('#name').val(),'address':$('#address').val(),'phone':$('#phone').val(),'gender':parseInt($('select#gender').val()),'email':$('#email').val(),'password':$('#password').val(),
-				'specialization':$('select#classTrain').val()};
+				'specialization':$('select#classTrain').val(),'placeId':$('select#placeId').val()};
 			}
 			console.log("check data =>", JSON.stringify(data));
 			postData(uri,target,data);
