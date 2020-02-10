@@ -86,7 +86,16 @@ function parseUserData(){
 	return dataProfile;
 }
 
-function validate(param) {
+async function makeSpecArray(dataProfile){
+	// var splitSpec = dataProfile.specialization.split(",");
+	// var splittedFinal = splitSpec.map(function (x) { 
+	// 	return parseInt(x, 10); 
+	//   });
+	// return splittedFinal;
+	return dataProfile.specialization;
+}
+
+async function validate(param) {
 	let dataProfile = JSON.parse(localStorage.getItem("dataProfile"));
 	let directory = urlService;
 	if (dataProfile) {
@@ -95,7 +104,7 @@ function validate(param) {
 				window.location = "home.html";
 				break;
 			case "addSchedule":
-				getData('classList',"all");
+				getData(param,dataProfile.specialization);
 				break;
 		}
 	} else {
@@ -139,10 +148,10 @@ function getData(param, extraParam) {
 	let directory = urlService;
 	switch (param) {
 		case "memberClass":
-			directory += '/class/memberClass/' + profile.data.accessToken;
+			directory += '/class/memberClass/' + profile.accessToken;
 			break;
 		case "addSchedule":
-			directory += '/class/' + profile.data.accessToken;
+			directory += '/class/' + profile.accessToken;
 			break;
 		case "trainerRegist":
 			directory += '/class/x';
@@ -236,7 +245,7 @@ function getData(param, extraParam) {
 				"Cache-Control": "no-cache",
 				"Accept-Encoding": "gzip, deflate",
 				"Connection": "keep-alive",
-				"param":extraParam
+				"byClassId":extraParam
 			},
 			timeout: 8000,
 			success: function (callback) {
@@ -312,6 +321,35 @@ function postData(uri, target, dd) {
 						break;
 					default:
 						notification(500, "Login failed");
+						break;
+				}
+				
+			},
+			error: function () {
+				loadingDeactive();
+				notification(500, "Cannot login, please try again");
+			}
+		});
+	} else if (target == 'coachSchedule') {
+		$.ajax({
+			url: urlService + '/coach/schedule',
+			type: "POST",
+			data: JSON.stringify(dd),
+			timeout: 5000,
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			success: function (callback) {
+				loadingDeactive();
+				switch (callback.responseCode) {
+					case "200":
+						notification(200, "Success create schedule");
+						// console.log('schedule back',callback);
+						window.location.href="schedule.html";
+						break;
+					default:
+						notification(500, "Failed create schedule, please try again");
 						break;
 				}
 				
