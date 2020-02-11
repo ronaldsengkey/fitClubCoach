@@ -22,6 +22,9 @@ $(function () {
 	if($('#addSchedulePage').length > 0){
 		validate('addSchedule');
 	}
+	if($('#schedulePage').length > 0){
+		validate('listSchedule');
+	}
 	var userData = parseUserData();
 	console.log('user data',userData);
 	setTimeout(function () {
@@ -106,6 +109,9 @@ async function validate(param) {
 			case "addSchedule":
 				getData(param,dataProfile.specialization);
 				break;
+			case "listSchedule":
+				getData(param);
+				break;
 		}
 	} else {
 		// logout();
@@ -155,6 +161,9 @@ function getData(param, extraParam) {
 			break;
 		case "trainerRegist":
 			directory += '/class/x';
+			break;
+		case "listSchedule":
+			directory += '/coach/class/schedule/' + profile.accessToken;
 			break;
 		case "getPlace":
 			directory += '/place/x';
@@ -261,6 +270,35 @@ function getData(param, extraParam) {
 				}
 			}
 		})
+	} else if(param == 'listSchedule'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"Accept-Encoding": "gzip, deflate",
+				"Connection": "keep-alive",
+				"byClassId":extraParam
+			},
+			timeout: 8000,
+			success: function (callback) {
+				switch (callback.responseCode) {
+					case "401":
+						logout();
+						break;
+					case "404":
+						console.log('schedule',callback);
+						break;
+					case "200":
+						console.log('schedule success',callback);
+						callback.data.forEach(appendScheduleData);
+						break;
+				}
+			}
+		})
 	} else {
 		$.ajax({
 			url: directory,
@@ -299,8 +337,38 @@ function getData(param, extraParam) {
 	}
 }
 
+function appendScheduleData(data,index){
+	let tagSchedule = '<div class="card card-cascade wider mb-3 classSchedule" data-id="3">'+
+		'<div class="card-body card-body-cascade text-center">'+
+			'<div class="row">'+
+				'<div class="col-12" style="padding:0px;">'+
+					'<table class="table table-borderless table-sm mb-0">'+
+						'<tbody>'+
+							'<tr>'+
+								'<td class="font-weight-normal align-middle">'+
+									'<span class="blue-text"><i class="fas fa-dumbbell fa-lg text-muted"></i>'+
+										'&nbsp;'+data.class_name+'</span>'+
+								'</td>'+
+								'<td class="font-weight-normal mr-3">'+
+									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_date).format('DD MMMM YYYY')+'</p>'+
+								'</td>'+
+								'<td class="font-weight-normal mr-3">'+
+									'<p class="mb-1 text-muted text-default">'+data.class_start_time+'</p>'+
+								'</td>'+
+							'</tr>'+
+						'</tbody>'+
+					'</table>'+
+				'</div>'+
+			'</div>'+
+		'</div>'+
+	'</div>'+
+	'<div class="clearfix"></div><br/>';
+	$('.scheduleList').append(tagSchedule);
+}
+
 function postData(uri, target, dd) {
 	loadingActive();
+	let profileData = JSON.parse(localStorage.getItem("dataProfile"));
 	if (target == 'login') {
 		$.ajax({
 			url: urlService + '/' + target,
@@ -332,7 +400,7 @@ function postData(uri, target, dd) {
 		});
 	} else if (target == 'coachSchedule') {
 		$.ajax({
-			url: urlService + '/coach/schedule',
+			url: urlService + '/coach/class/schedule/' + profileData.accessToken,
 			type: "POST",
 			data: JSON.stringify(dd),
 			timeout: 5000,
@@ -356,7 +424,7 @@ function postData(uri, target, dd) {
 			},
 			error: function () {
 				loadingDeactive();
-				notification(500, "Cannot login, please try again");
+				notification(500, "Server error, please try again");
 			}
 		});
 	} else {
