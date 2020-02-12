@@ -25,6 +25,9 @@ $(function () {
 	if($('#schedulePage').length > 0){
 		validate('listSchedule');
 	}
+	if($('#scheduleDetailPage').length > 0){
+		validate('scheduleDetail');
+	}
 	var userData = parseUserData();
 	console.log('user data',userData);
 	setTimeout(function () {
@@ -109,6 +112,9 @@ async function validate(param) {
 			case "addSchedule":
 				getData(param,dataProfile.specialization);
 				break;
+			case "scheduleDetail":
+				getScheduleDetail();
+				break;
 			case "listSchedule":
 				getData(param);
 				break;
@@ -121,6 +127,13 @@ async function validate(param) {
 				break;
 		}
 	}
+}
+
+function getScheduleDetail(){
+	let searchParams = new URLSearchParams(window.location.search);
+	let param = searchParams.get('id');
+	console.log('ww',param);
+	getData('classDetail',param);
 }
 
 function appendSpecialization(data,index){
@@ -164,6 +177,9 @@ function getData(param, extraParam) {
 			break;
 		case "listSchedule":
 			directory += '/coach/class/schedule/' + profile.accessToken;
+			break;
+		case "classDetail":
+			directory += '/class/detail/' + profile.accessToken + '/' + extraParam;
 			break;
 		case "getPlace":
 			directory += '/place/x';
@@ -239,6 +255,45 @@ function getData(param, extraParam) {
 						break;
 					case "200":
 						callback.data.forEach(appendGetPlace);
+						break;
+				}
+			}
+		})
+	} else if(param == 'classDetail'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"param" :"all"
+			},
+			timeout: 8000,
+			tryCount: 0,
+			retryLimit: 3,
+			success: function (callback) {
+				console.log('kembalian', callback);
+				console.log('kembalian p', param);
+				console.log('kembalian d', directory);
+				switch (callback.responseCode) {
+					case "500":
+						this.tryCount++;
+						if (this.tryCount < this.retryLimit) {
+							$.ajax(this);
+						}
+						break;
+					case "401":
+						logout();
+						break;
+					case "404":
+						notification(500,'data not found');
+						break;
+					case "200":
+						// callback.data.forEach(appendGetPlace);
+						console.log('ww',callback);
+						appendDetailSchedule(callback.data);
 						break;
 				}
 			}
@@ -337,8 +392,13 @@ function getData(param, extraParam) {
 	}
 }
 
+function appendDetailSchedule(data){
+	$('.className').html(data.className);
+	$('#classDesc').html(data.descript);
+}
+
 function appendScheduleData(data,index){
-	let tagSchedule = '<div class="card card-cascade wider mb-3 classSchedule" data-id="3">'+
+	let tagSchedule = '<div class="card card-cascade wider mb-3 classSchedule" data-id='+data.class_id+'>'+
 		'<div class="card-body card-body-cascade text-center">'+
 			'<div class="row">'+
 				'<div class="col-12" style="padding:0px;">'+
