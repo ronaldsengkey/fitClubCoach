@@ -1,4 +1,4 @@
-﻿var urlService = 'http://192.168.0.51:8888/ronaldSengkey/fitClub/api/v1';
+﻿var urlService = 'http://192.168.0.6:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
 var fieldPswdInput = '<input type="password" class="form-control fieldPswd">';
@@ -27,6 +27,9 @@ $(function () {
 	}
 	if($('#scheduleDetailPage').length > 0){
 		validate('scheduleDetail');
+	}
+	if($('#homeCoachPage').length > 0){
+		validate('classHistory');
 	}
 	var userData = parseUserData();
 	console.log('user data',userData);
@@ -118,6 +121,9 @@ async function validate(param) {
 			case "listSchedule":
 				getData(param);
 				break;
+			case "classHistory":
+				getClassHistory();
+				break;
 		}
 	} else {
 		// logout();
@@ -127,6 +133,10 @@ async function validate(param) {
 				break;
 		}
 	}
+}
+
+function getClassHistory(){
+	getData('classHistory');
 }
 
 function getScheduleDetail(){
@@ -180,6 +190,9 @@ function getData(param, extraParam) {
 			break;
 		case "classDetail":
 			directory += '/class/detail/' + profile.accessToken + '/' + extraParam;
+			break;
+		case "classHistory":
+			directory += '/class/coachClass/history/' + profile.accessToken;
 			break;
 		case "getPlace":
 			directory += '/place/x';
@@ -255,6 +268,44 @@ function getData(param, extraParam) {
 						break;
 					case "200":
 						callback.data.forEach(appendGetPlace);
+						break;
+				}
+			}
+		})
+	} else if(param == 'classHistory'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"param" :"all"
+			},
+			timeout: 8000,
+			tryCount: 0,
+			retryLimit: 3,
+			success: function (callback) {
+				console.log('kembalian', callback);
+				console.log('kembalian p', param);
+				console.log('kembalian d', directory);
+				switch (callback.responseCode) {
+					case "500":
+						this.tryCount++;
+						if (this.tryCount < this.retryLimit) {
+							$.ajax(this);
+						}
+						break;
+					case "401":
+						logout();
+						break;
+					case "404":
+						let emptySchedule = '<h3>Empty Class History</h3>'
+						$('#scheduleHistory').append(emptySchedule);
+						break;
+					case "200":
+						callback.data.forEach(appendClassHistory);
 						break;
 				}
 			}
@@ -390,6 +441,35 @@ function getData(param, extraParam) {
 			}
 		})
 	}
+}
+
+function appendClassHistory(data,index){
+	let tagHistory = '<div class="card card-cascade wider mb-3 classSchedule" data-id='+data.class_id+'>'+
+		'<div class="card-body card-body-cascade text-center">'+
+			'<div class="row">'+
+				'<div class="col-12" style="padding:0px;">'+
+					'<table class="table table-borderless table-sm mb-0">'+
+						'<tbody>'+
+							'<tr>'+
+								'<td class="font-weight-normal align-middle">'+
+									'<span class="blue-text"><i class="fas fa-dumbbell fa-lg text-muted"></i>'+
+										'&nbsp;'+data.class_name+'</span>'+
+								'</td>'+
+								'<td class="font-weight-normal mr-3">'+
+									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_date).format('DD MMMM YYYY')+'</p>'+
+								'</td>'+
+								'<td class="font-weight-normal mr-3">'+
+									'<p class="mb-1 text-muted text-default">'+data.class_start_time+'</p>'+
+								'</td>'+
+							'</tr>'+
+						'</tbody>'+
+					'</table>'+
+				'</div>'+
+			'</div>'+
+		'</div>'+
+	'</div>'+
+	'<div class="clearfix"></div><br/>';
+	$('#scheduleHistory').append(tagHistory);
 }
 
 function appendDetailSchedule(data){
