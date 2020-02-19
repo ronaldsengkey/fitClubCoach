@@ -1,4 +1,4 @@
-﻿var urlService = 'http://192.168.0.6:8888/ronaldSengkey/fitClub/api/v1';
+﻿var urlService = 'http://192.168.0.51:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
 var fieldPswdInput = '<input type="password" class="form-control fieldPswd">';
@@ -27,6 +27,9 @@ $(function () {
 	}
 	if($('#scheduleDetailPage').length > 0){
 		validate('scheduleDetail');
+	}
+	if($('#switchSchedulePage').length > 0){
+		validate('switchSchedule');
 	}
 	if($('#homeCoachPage').length > 0){
 		validate('classHistory');
@@ -104,6 +107,17 @@ async function makeSpecArray(dataProfile){
 	return dataProfile.specialization;
 }
 
+function putSwitchData(){
+	let searchParams = new URLSearchParams(window.location.search);
+	let classId = searchParams.get('classId');
+	let coachOldId = searchParams.get('coachId');
+	let schedOldId = searchParams.get('oldSchedId');
+	$('#schedId').val(schedOldId);
+	$('#oldCoachId').val(coachOldId);
+	console.log('data to switch',schedOldId);
+	console.log('data to switch coach',coachOldId);
+}
+
 async function validate(param) {
 	let dataProfile = JSON.parse(localStorage.getItem("dataProfile"));
 	let directory = urlService;
@@ -124,6 +138,9 @@ async function validate(param) {
 			case "classHistory":
 				getClassHistory();
 				break;
+			case "switchSchedule":
+				putSwitchData();
+				break;
 		}
 	} else {
 		// logout();
@@ -141,9 +158,13 @@ function getClassHistory(){
 
 function getScheduleDetail(){
 	let searchParams = new URLSearchParams(window.location.search);
-	let param = searchParams.get('id');
-	console.log('ww',param);
-	getData('classDetail',param);
+	let classId = searchParams.get('classId');
+	console.log('ww',classId);
+	let coachOldId = searchParams.get('coachId');
+	let schedOldId = searchParams.get('oldSchedId');
+	$('#schedId').val(schedOldId);
+	$('#oldCoachId').val(coachOldId);
+	getData('classDetail',classId);
 }
 
 function appendSpecialization(data,index){
@@ -196,6 +217,9 @@ function getData(param, extraParam) {
 			break;
 		case "getPlace":
 			directory += '/place/x';
+			break;
+		case "coachScheduleDate":
+			directory += '/class/' + profile.accessToken;
 			break;
 	}
 	if(param == 'trainerRegist'){
@@ -268,6 +292,43 @@ function getData(param, extraParam) {
 						break;
 					case "200":
 						callback.data.forEach(appendGetPlace);
+						break;
+				}
+			}
+		})
+	} else if(param == 'coachScheduleDate'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"byDate" :extraParam
+			},
+			timeout: 8000,
+			tryCount: 0,
+			retryLimit: 3,
+			success: function (callback) {
+				console.log('kembalian coach schedule', callback);
+				console.log('kembalian p', param);
+				console.log('kembalian d', directory);
+				switch (callback.responseCode) {
+					case "500":
+						this.tryCount++;
+						if (this.tryCount < this.retryLimit) {
+							$.ajax(this);
+						}
+						break;
+					case "401":
+						logout();
+						break;
+					case "404":
+						notification(500,'data not found');
+						break;
+					case "200":
+						callback.data.forEach(appendScheduleByDate);
 						break;
 				}
 			}
@@ -443,8 +504,13 @@ function getData(param, extraParam) {
 	}
 }
 
+function appendScheduleByDate(data,index){
+	let switchClassSchedule = '<option value='+data.scheduleId+' data-class='+data.id+'>'+data.name+'</option>'
+	$('#classChoose').append(switchClassSchedule);
+}
+
 function appendClassHistory(data,index){
-	let tagHistory = '<div class="card card-cascade wider mb-3 classSchedule" data-id='+data.class_id+'>'+
+	let tagHistory = '<div class="card card-cascade wider mb-3 classSchedule" data-id='+data.classId+'>'+
 		'<div class="card-body card-body-cascade text-center">'+
 			'<div class="row">'+
 				'<div class="col-12" style="padding:0px;">'+
@@ -453,13 +519,13 @@ function appendClassHistory(data,index){
 							'<tr>'+
 								'<td class="font-weight-normal align-middle">'+
 									'<span class="blue-text"><i class="fas fa-dumbbell fa-lg text-muted"></i>'+
-										'&nbsp;'+data.class_name+'</span>'+
+										'&nbsp;'+data.className+'</span>'+
 								'</td>'+
 								'<td class="font-weight-normal mr-3">'+
 									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_date).format('DD MMMM YYYY')+'</p>'+
 								'</td>'+
 								'<td class="font-weight-normal mr-3">'+
-									'<p class="mb-1 text-muted text-default">'+data.class_start_time+'</p>'+
+									'<p class="mb-1 text-muted text-default">'+data.startTime+'</p>'+
 								'</td>'+
 							'</tr>'+
 						'</tbody>'+
@@ -478,7 +544,7 @@ function appendDetailSchedule(data){
 }
 
 function appendScheduleData(data,index){
-	let tagSchedule = '<div class="card card-cascade wider mb-3 classSchedule" data-id='+data.class_id+'>'+
+	let tagSchedule = '<div class="card card-cascade wider mb-3 classSchedule" data-schedule='+data.scheduleId+' data-id='+data.class_id+' data-coach='+data.coach_account_id+'>'+
 		'<div class="card-body card-body-cascade text-center">'+
 			'<div class="row">'+
 				'<div class="col-12" style="padding:0px;">'+

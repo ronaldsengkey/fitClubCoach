@@ -3,16 +3,30 @@ $(document).on('click','#newProgress',(function(e){
 }))
 
 $(document).on('click','.classSchedule',(function(e){
-	var idClass = $(this).data('id');	
-	window.location.href="scheduleDetail.html?id=" + idClass;
+	var oldScheduleId = $(this).data('schedule');
+	var thisClassId = $(this).data('id');
+	var oldCoachId = $(this).data('coach');
+	window.location.href="scheduleDetail.html?oldSchedId=" + oldScheduleId + '&coachId=' + oldCoachId + '&classId=' + thisClassId;
 }))
 
+$(document).on('click','.toSwitch',function(){
+	let searchParams = new URLSearchParams(window.location.search);
+	let classToSwitchId = searchParams.get('classId');
+	let coachOldSwitchId = searchParams.get('coachId');
+	let schedOldSwitchId = searchParams.get('oldSchedId');
+
+	window.location.href="switchSchedule.html?oldSchedId=" + schedOldSwitchId + '&coachId=' + coachOldSwitchId + '&classId=' + classToSwitchId;
+})
+
 $(document).on('change','#classSwitchDate',(function(e){
+	console.log('ww',$(this).val());
+	var date = $(this).val();
+	getData('coachScheduleDate',date);
 	let switchClass = '<div class="row">'+
 	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
 		'<div class="clearfix"></div><br>'+
 		'<label><i class="fa fa-calendar"></i>&nbsp;Class</label>'+
-		'<select id="classChoose" class="form-control"><option selected></option><option>Isi class</option></select>';
+		'<select id="classChoose" class="form-control"></select>';
 		'</div>'+
 	'</div>';
 	$('.classContain').append(switchClass);
