@@ -1,4 +1,4 @@
-﻿var urlService = 'http://192.168.0.51:8888/ronaldSengkey/fitClub/api/v1';
+﻿var urlService = 'http://192.168.0.55:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
 var fieldPswdInput = '<input type="password" class="form-control fieldPswd">';
@@ -219,7 +219,8 @@ function getData(param, extraParam) {
 			directory += '/place/x';
 			break;
 		case "coachScheduleDate":
-			directory += '/class/' + profile.accessToken;
+			directory += '/class/schedule/' + profile.accessToken;
+			console.log('param schedule',extraParam);
 			break;
 	}
 	if(param == 'trainerRegist'){
@@ -305,7 +306,7 @@ function getData(param, extraParam) {
 				"Content-Type": "application/json",
 				"Accept": "*/*",
 				"Cache-Control": "no-cache",
-				"byDate" :extraParam
+				"param" : JSON.stringify({"byDate":String(extraParam)}) 
 			},
 			timeout: 8000,
 			tryCount: 0,
@@ -505,12 +506,12 @@ function getData(param, extraParam) {
 }
 
 function appendScheduleByDate(data,index){
-	let switchClassSchedule = '<option value='+data.scheduleId+' data-class='+data.id+'>'+data.name+'</option>'
+	let switchClassSchedule = '<option value='+data.coachName+' data-schedId="'+data.scheduleId+'" data-coachId='+data.coachId+' data-class='+data.classId+'>'+data.className+' - '+data.startTime+'</option>'
 	$('#classChoose').append(switchClassSchedule);
 }
 
 function appendClassHistory(data,index){
-	let tagHistory = '<div class="card card-cascade wider mb-3 classSchedule" data-id='+data.classId+'>'+
+	let tagHistory = '<div class="card card-cascade wider mb-3" data-id='+data.classId+'>'+
 		'<div class="card-body card-body-cascade text-center">'+
 			'<div class="row">'+
 				'<div class="col-12" style="padding:0px;">'+
@@ -522,7 +523,7 @@ function appendClassHistory(data,index){
 										'&nbsp;'+data.className+'</span>'+
 								'</td>'+
 								'<td class="font-weight-normal mr-3">'+
-									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_date).format('DD MMMM YYYY')+'</p>'+
+									'<p class="mb-1 text-muted text-default">'+moment(data.startDate).format('DD MMMM YYYY')+'</p>'+
 								'</td>'+
 								'<td class="font-weight-normal mr-3">'+
 									'<p class="mb-1 text-muted text-default">'+data.startTime+'</p>'+

@@ -26,27 +26,76 @@ $(document).on('change','#classSwitchDate',(function(e){
 	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
 		'<div class="clearfix"></div><br>'+
 		'<label><i class="fa fa-calendar"></i>&nbsp;Class</label>'+
-		'<select id="classChoose" class="form-control"></select>';
+		'<select id="classChoose" class="form-control"><option selected></option></select>';
 		'</div>'+
 	'</div>';
 	$('.classContain').append(switchClass);
 }));
 
-$(document).on('change','#classChoose',(function(e){
+$(document).on('change','#classChoose',(function(){
+	// console.log('choose class val',$(this).val());
+	console.log('cak',$(this).find(':selected').attr('data-schedId'));
+	let newSchedId = $(this).find(':selected').attr('data-schedId');
+	let newCoachId = $(this).find(':selected').attr('data-coachId');
+	$('#newSchedId').val(newSchedId);
+	$('#newCoachId').val(newCoachId);
 	let switchClass = '<div class="row">'+
 	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
 		'<div class="clearfix"></div><br>'+
 		'<label><i class="fa fa-calendar"></i>&nbsp;Coach</label>'+
-		'<select id="coachChoose" class="form-control"><option selected></option><option>Isi coach</option></select>';
+		'<input type="text" class="form-control" disabled value="'+$(this).val()+'"'+
 		'</div>'+
 	'</div>';
 	$('.coachContain').append(switchClass);
-}));
 
-$(document).on('change','#coachChoose',(function(e){
-	let btnChoose = '<button class="btn btn-block btn-success btn-indigo waves-effect waves-light">Switch</button>';
+	let btnChoose = '<button class="btn btn-block btn-success btn-indigo waves-effect waves-light switchSchedule">Switch</button>';
 	$('.btnSwitch').append(btnChoose);
 }));
+
+$(document).on('click','.switchSchedule',function(){
+	let profile = JSON.parse(localStorage.getItem('dataProfile'));
+	let directoryPass = urlService;
+	directoryPass += '/coach/switchClass/' + profile.accessToken;
+	let dataSwitch = {
+		"idSelfSchedule" : parseInt($('#schedId').val()),
+		"selfId" : parseInt($('#oldCoachId').val()),
+		"targetSchedule" : parseInt($('#newSchedId').val()),
+		"targetCoach" : parseInt($('#newCoachId').val())
+	};
+	console.log('halos',dataSwitch);
+	console.log('pass',directoryPass);
+	$.ajax({
+		url: directoryPass,
+		crossDomain: true,
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			"Accept": "*/*",
+			"Cache-Control": "no-cache",
+			"Accept-Encoding": "gzip, deflate",
+			"Connection": "keep-alive",
+		},
+		data : JSON.stringify(dataSwitch),
+		timeout: 8000,
+		success: function (callback) {
+			console.log('kembalian switch',callback);
+			switch (callback.responseCode) {
+				case "401":
+					logout();
+					break;
+				case "404":
+					notification(404,'data not found');
+					break;
+				case "200":
+					notification(200,'process success, thank you');
+					setTimeout(() => {
+						window.location.href = 'schedule.html';
+					}, 300);
+					break;
+			}
+		}
+	})
+})
 
 
 $(document).on('submit','#imgProfile',(function(e) {
