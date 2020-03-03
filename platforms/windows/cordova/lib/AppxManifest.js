@@ -17,7 +17,7 @@
     under the License.
 */
 
-var fs = require('fs');
+var fs = require('fs');;
 var util = require('util');
 var et = require('elementtree');
 var path = require('path');

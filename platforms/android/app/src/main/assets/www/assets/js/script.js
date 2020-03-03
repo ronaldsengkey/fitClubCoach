@@ -1,4 +1,5 @@
-﻿var urlService = 'http://192.168.0.55:8888/ronaldSengkey/fitClub/api/v1';
+﻿var urlService = 'http://192.168.0.47:8888/ronaldSengkey/fitClub/api/v1';
+// var urlService = 'http://localhost:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
 var fieldPswdInput = '<input type="password" class="form-control fieldPswd">';
@@ -24,6 +25,7 @@ $(function () {
 	}
 	if($('#schedulePage').length > 0){
 		validate('listSchedule');
+		
 	}
 	if($('#scheduleDetailPage').length > 0){
 		validate('scheduleDetail');
@@ -34,6 +36,9 @@ $(function () {
 	if($('#homeCoachPage').length > 0){
 		validate('classHistory');
 	}
+	if($('#switchRequestPage').length >0){
+		validate('switchReqeuest');
+	}
 	var userData = parseUserData();
 	console.log('user data',userData);
 	setTimeout(function () {
@@ -41,6 +46,26 @@ $(function () {
 	}, 300);
 });
 
+// $(document).ready(function() {
+//     document.addEventListener("deviceready", onDeviceReady, false);
+// });
+
+// function onDeviceReady() {      
+// 	$('.scanMember').click( function() 
+// 	{
+// 	cordova.plugins.barcodeScanner.scan(
+// 	function (result) {
+// 		alert("We got a barcode\n" +
+// 				"Result: " + result.text + "\n" +
+// 				"Format: " + result.format + "\n" +
+// 				"Cancelled: " + result.cancelled);            
+// 	}, 
+// 	function (error) {
+// 		alert("Scanning failed: " + error);
+// 	});
+// 	}
+// );
+// }
 
 function logout() {
 	localStorage.removeItem("dataProfile");
@@ -138,6 +163,9 @@ async function validate(param) {
 			case "classHistory":
 				getClassHistory();
 				break;
+			case "switchReqeuest":
+				getSwitchRequest();
+				break;
 			case "switchSchedule":
 				putSwitchData();
 				break;
@@ -150,6 +178,10 @@ async function validate(param) {
 				break;
 		}
 	}
+}
+
+function getSwitchRequest(){
+	getData('switchRequest');
 }
 
 function getClassHistory(){
@@ -193,6 +225,30 @@ function appendClassList(data,index){
 	$('#classOptionList').append(classHtml);
 }
 
+function appendSwitchRequest(data,index){
+	let switchReqHtml = '<div class="card card-cascade wider">' +
+		'<div class="card-body card-body-cascade text-center">' +
+		'<div class="row">' +
+		'<div class="col-8" style="border-right:solid 1px #ddd;padding-left:3%;">' +
+		'<div class="news">' +
+		'<div class="excerpt">' +
+		'<div class="brief">' +
+		'<h5 class="blue-text">' + data.class_name + '</h5></div>' +
+		'<div class="feed-footer">' +
+		'<div> by : ' + data.coach_name + '</div>' +
+		'<a class="like">' +
+		'</a></div></div></div></div>' +
+		'<div class="col-4">' +
+		'<h6 class="h6 text-default">' + data.class_start_time + '</h6>' +
+		'<a class="btn-floating btn-sm purple-gradient waves-effect waves-light text-white" onclick="toClassDetail(' + data.class_id + ')"><i class="fas fa-check"></i></a>' +
+		// '<a class="btn-floating btn-sm peach-gradient waves-effect waves-light text-white"><i class="fas fa-times"></i></a>' +
+		'<h6 class="h6 text-default">' + data.class_end_time + '</h6>' +
+		'</div>' +
+		'</div>' +
+		'</div></div><div class="clearfix"></div><br/>';
+	$('#switchRequestData').append(switchReqHtml);
+}
+
 function getData(param, extraParam) {
 	let profile = JSON.parse(localStorage.getItem('dataProfile'));
 	let directory = urlService;
@@ -221,6 +277,9 @@ function getData(param, extraParam) {
 		case "coachScheduleDate":
 			directory += '/class/schedule/' + profile.accessToken;
 			console.log('param schedule',extraParam);
+			break;
+		case "switchRequest":
+			directory += '/coach/class/schedule/' + profile.accessToken;
 			break;
 	}
 	if(param == 'trainerRegist'){
@@ -256,6 +315,41 @@ function getData(param, extraParam) {
 						break;
 					case "200":
 						callback.data.forEach(appendSpecialization);
+						break;
+				}
+			}
+		})
+	} else if(param == 'switchRequest'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"param" :"all"
+			},
+			timeout: 8000,
+			tryCount: 0,
+			retryLimit: 3,
+			success: function (callback) {
+				console.log('kembalian data switch request', callback);
+				switch (callback.responseCode) {
+					case "500":
+						this.tryCount++;
+						if (this.tryCount < this.retryLimit) {
+							$.ajax(this);
+						}
+						break;
+					case "401":
+						logout();
+						break;
+					case "404":
+						notification(500,'data not found');
+						break;
+					case "200":
+						callback.data.forEach(appendSwitchRequest);
 						break;
 				}
 			}
@@ -406,6 +500,13 @@ function getData(param, extraParam) {
 					case "200":
 						// callback.data.forEach(appendGetPlace);
 						console.log('ww',callback);
+						if(callback.data.action == 'started'){
+							$('#classSwitch').prop('checked',true);
+						} else if(callback.data.action == null || callback.data.action == 'null'){
+							$('#classSwitch').prop('checked',false);
+						} else {
+							$('#classSwitch').attr('disabled',true)
+						}
 						appendDetailSchedule(callback.data);
 						break;
 				}
@@ -576,7 +677,9 @@ function appendScheduleData(data,index){
 function postData(uri, target, dd) {
 	loadingActive();
 	let profileData = JSON.parse(localStorage.getItem("dataProfile"));
+	
 	if (target == 'login') {
+		
 		$.ajax({
 			url: urlService + '/' + target,
 			type: "POST",
@@ -587,6 +690,7 @@ function postData(uri, target, dd) {
 				'Content-Type': 'application/json'
 			},
 			success: function (callback) {
+				alert(callback);
 				loadingDeactive();
 				switch (callback.responseCode) {
 					case "200":

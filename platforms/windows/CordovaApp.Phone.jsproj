@@ -80,4 +80,7 @@
             <IsWinMDFile>true</IsWinMDFile>
         </Reference>
     </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\plugins\phonegap-plugin-barcodescanner\src\windows\lib\WinRTBarcodeReader.csproj" />
+    </ItemGroup>
 </Project>

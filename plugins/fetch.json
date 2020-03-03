@@ -162,7 +162,7 @@
   "phonegap-plugin-barcodescanner": {
     "source": {
       "type": "registry",
-      "id": "phonegap-plugin-barcodescanner@7.1.1"
+      "id": "phonegap-plugin-barcodescanner@8.1.0"
     },
     "is_top_level": true,
     "variables": {}
@@ -171,6 +171,14 @@
     "source": {
       "type": "registry",
       "id": "cordova-plugin-android-gpsdetect"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-qrscanner": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-qrscanner"
     },
     "is_top_level": true,
     "variables": {}

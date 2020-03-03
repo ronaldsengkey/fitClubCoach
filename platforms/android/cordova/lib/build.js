@@ -21,7 +21,7 @@
 
 var Q = require('q');
 var path = require('path');
-var fs = require('fs');
+var fs = require('fs');;
 var nopt = require('nopt');
 
 var Adb = require('./Adb');

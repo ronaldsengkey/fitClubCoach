@@ -20,7 +20,7 @@
 /* eslint no-unused-vars: 0 */
 
 var Q = require('q');
-var fs = require('fs');
+var fs = require('fs');;
 var path = require('path');
 var shell = require('shelljs');
 var events = require('cordova-common').events;

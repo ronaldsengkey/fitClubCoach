@@ -450,6 +450,42 @@ module.exports = [
         "clobbers": [
             ""
         ]
+    },
+    {
+        "id": "cordova-plugin-qrscanner.QRScanner",
+        "file": "plugins/cordova-plugin-qrscanner/www/www.min.js",
+        "pluginId": "cordova-plugin-qrscanner",
+        "clobbers": [
+            "QRScanner"
+        ]
+    },
+    {
+        "id": "cordova-plugin-qrscanner.qrScanner",
+        "file": "plugins/cordova-plugin-qrscanner/src/windows/lib/qrScanner.js",
+        "pluginId": "cordova-plugin-qrscanner",
+        "runs": true
+    },
+    {
+        "id": "cordova-plugin-qrscanner.preview",
+        "file": "plugins/cordova-plugin-qrscanner/src/windows/lib/preview.js",
+        "pluginId": "cordova-plugin-qrscanner",
+        "runs": true
+    },
+    {
+        "id": "phonegap-plugin-barcodescanner.BarcodeScanner",
+        "file": "plugins/phonegap-plugin-barcodescanner/www/barcodescanner.js",
+        "pluginId": "phonegap-plugin-barcodescanner",
+        "clobbers": [
+            "cordova.plugins.barcodeScanner"
+        ]
+    },
+    {
+        "id": "phonegap-plugin-barcodescanner.BarcodeScannerProxy",
+        "file": "plugins/phonegap-plugin-barcodescanner/src/windows/BarcodeScannerProxy.js",
+        "pluginId": "phonegap-plugin-barcodescanner",
+        "merges": [
+            ""
+        ]
     }
 ];
 module.exports.metadata = 
@@ -467,7 +503,9 @@ module.exports.metadata =
     "cordova-plugin-device-orientation": "1.0.7",
     "cordova-plugin-dialogs": "1.2.1",
     "cordova-plugin-file": "6.0.1",
-    "cordova-plugin-file-transfer": "1.5.1"
+    "cordova-plugin-file-transfer": "1.5.1",
+    "cordova-plugin-qrscanner": "3.0.1",
+    "phonegap-plugin-barcodescanner": "7.1.1"
 };
 // BOTTOM OF METADATA
 });

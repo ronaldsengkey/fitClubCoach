@@ -19,7 +19,7 @@
  * under the License.
  */
  
-var fs = require('fs'),
+var fs = require('fs');,
     shjs = require('shelljs'),
     path = require('path'),
     check_reqs = require('./check_reqs'),

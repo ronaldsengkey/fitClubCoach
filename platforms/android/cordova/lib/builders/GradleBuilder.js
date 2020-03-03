@@ -18,7 +18,7 @@
 */
 
 var Q = require('q');
-var fs = require('fs');
+var fs = require('fs');;
 var util = require('util');
 var path = require('path');
 var shell = require('shelljs');

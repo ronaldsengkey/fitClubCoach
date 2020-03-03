@@ -90,7 +90,7 @@ $(document).on('click','.switchSchedule',function(){
 					notification(200,'process success, thank you');
 					setTimeout(() => {
 						window.location.href = 'schedule.html';
-					}, 300);
+					}, 500);
 					break;
 			}
 		}
@@ -136,6 +136,78 @@ $(document).on('submit','#imgProfile',(function(e) {
 	}
 }));
 
+$(document).on('click','#classSwitch',function(){
+	console.log('switch yok',$(this).is(':checked'));
+	let profile = JSON.parse(localStorage.getItem('dataProfile'));
+	let directoryPassSwitch = urlService;
+	directoryPassSwitch += '/coach/actionClass/' + profile.accessToken;
+	var checkedSwitch = $(this).is(':checked');
+	let searchParamsSwitch = new URLSearchParams(window.location.search);
+	let classIdSwitch = searchParamsSwitch.get('oldSchedId');
+	var dataToSwitch = '';
+	if(checkedSwitch){
+		dataToSwitch = {
+			"scheduleId" : parseInt(classIdSwitch),
+			"action" : "started"
+		};
+	} else {
+		dataToSwitch = {
+			"scheduleId" : parseInt(classIdSwitch),
+			"action" : "finished"
+		};
+	}
+	$.ajax({
+		url: directoryPassSwitch,
+		crossDomain: true,
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			"Accept": "*/*",
+			"Cache-Control": "no-cache",
+			"Accept-Encoding": "gzip, deflate",
+			"Connection": "keep-alive",
+		},
+		data : JSON.stringify(dataToSwitch),
+		timeout: 8000,
+		success: function (callback) {
+			console.log('kembalian turn on off class',callback);
+			switch (callback.responseCode) {
+				case "401":
+					logout();
+					break;
+				case "200":
+					if(checkedSwitch){
+						notification(200,'Class has been activated, thank you');
+					} else {
+						notification(200,'Class has been deactivated, thank you');
+					}
+					setTimeout(() => {
+						window.location.href = 'schedule.html';
+					}, 1000);
+					break;
+				default:
+					notification(500,'server error');
+					break;
+			}
+		}
+	})
+})
+
+// $(document).on('click','.scanMember',function(){
+// 	window.QRScanner.scan(displayContents);
+
+// 	function displayContents(err, text){
+// 	if(err){
+// 		// an error occurred, or the scan was canceled (error code `6`)
+// 	} else {
+// 		// The scan completed, display the contents of the QR code:
+// 		alert(text);
+// 	}
+// 	}
+
+// 	// Make the webview transparent so the video preview is visible behind it.
+// 	window.QRScanner.show();
+// })
 
 $(document).on('click','.clickable',function(){
 	target = $(this).data('target');

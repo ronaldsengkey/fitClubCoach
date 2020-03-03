@@ -23,7 +23,7 @@
  Helper for dealing with Windows Store JS app .jsproj files
  */
 
-var fs = require('fs');
+var fs = require('fs');;
 var et = require('elementtree');
 var path = require('path');
 var util = require('util');

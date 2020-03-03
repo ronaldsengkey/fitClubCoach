@@ -36,7 +36,7 @@ var check_reqs = require('./check_reqs');
 
 var Q = require('q');
 var os = require('os');
-var fs = require('fs');
+var fs = require('fs');;
 var child_process = require('child_process');
 
 // constants

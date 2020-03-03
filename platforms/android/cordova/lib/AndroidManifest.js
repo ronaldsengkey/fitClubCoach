@@ -17,7 +17,7 @@
     under the License.
 */
 
-var fs = require('fs');
+var fs = require('fs');;
 var et = require('elementtree');
 var xml = require('cordova-common').xmlHelpers;
 

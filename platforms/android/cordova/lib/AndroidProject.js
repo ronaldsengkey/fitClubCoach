@@ -17,7 +17,7 @@
     under the License.
 */
 
-var fs = require('fs');
+var fs = require('fs');;
 var path = require('path');
 var properties_parser = require('properties-parser');
 var AndroidManifest = require('./AndroidManifest');

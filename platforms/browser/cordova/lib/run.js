@@ -19,7 +19,7 @@
  * under the License.
  */
 
-var fs = require('fs');
+var fs = require('fs');;
 var path = require('path');
 var url = require('url');
 var cordovaServe = require('cordova-serve');

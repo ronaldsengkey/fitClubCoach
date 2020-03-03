@@ -28,7 +28,7 @@ var Version = require('./Version');
 var MSBuildTools = require('./MSBuildTools');
 var AppxManifest = require('./AppxManifest');
 var ConfigParser = require('./ConfigParser');
-var fs = require('fs');
+var fs = require('fs');;
 
 var events = require('cordova-common').events;
 var CordovaError = require('cordova-common').CordovaError;
