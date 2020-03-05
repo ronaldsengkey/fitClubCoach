@@ -35,6 +35,10 @@ $(function () {
 	}
 	if($('#homeCoachPage').length > 0){
 		validate('classHistory');
+		validate('ongoingClass');
+		$('.tabs').tabs({
+			swipeable : true
+		});
 	}
 	if($('#switchRequestPage').length >0){
 		validate('switchReqeuest');
@@ -166,6 +170,9 @@ async function validate(param) {
 			case "switchReqeuest":
 				getSwitchRequest();
 				break;
+			case "ongoingClass":
+				getOngoingClass();
+				break;
 			case "switchSchedule":
 				putSwitchData();
 				break;
@@ -178,6 +185,10 @@ async function validate(param) {
 				break;
 		}
 	}
+}
+
+function getOngoingClass(){
+	getData('ongoingClass');
 }
 
 function getSwitchRequest(){
@@ -226,23 +237,33 @@ function appendClassList(data,index){
 }
 
 function appendSwitchRequest(data,index){
+	console.log('data to switch',data);
+	let respondedButton = '';
+	let respondedText = '';
+	if(data.status !== "yes" && data.status !== "no"){
+		respondedButton += '<a class="btn-floating btn-xs purple-gradient waves-effect waves-light text-white accRequest" data-switch='+data.id+'><i class="fas fa-check"></i></a>' +
+		'<a class="btn-floating btn-xs peach-gradient waves-effect waves-light text-white rejectRequest" data-switch='+data.id+'><i class="fas fa-times"></i></a>';
+	} else {
+		respondedText += '<div> your respon : ' + data.status + '</div>';
+	}
 	let switchReqHtml = '<div class="card card-cascade wider">' +
 		'<div class="card-body card-body-cascade text-center">' +
 		'<div class="row">' +
-		'<div class="col-8" style="border-right:solid 1px #ddd;padding-left:3%;">' +
+		'<div class="col-6" style="border-right:solid 1px #ddd;padding-left:3%;">' +
 		'<div class="news">' +
 		'<div class="excerpt">' +
 		'<div class="brief">' +
-		'<h5 class="blue-text">' + data.class_name + '</h5></div>' +
+		'<h5 class="blue-text">' + data.className + '</h5></div>' +
 		'<div class="feed-footer">' +
-		'<div> by : ' + data.coach_name + '</div>' +
-		'<a class="like">' +
+		'<div> by : ' + data.name + '</div>' +
+		'<div> on : ' + moment(data.requestDate).format('DD MMMM YYYY') + '</div>';
+		switchReqHtml += respondedText;
+		switchReqHtml += '<a class="like">' +
 		'</a></div></div></div></div>' +
-		'<div class="col-4">' +
-		'<h6 class="h6 text-default">' + data.class_start_time + '</h6>' +
-		'<a class="btn-floating btn-sm purple-gradient waves-effect waves-light text-white" onclick="toClassDetail(' + data.class_id + ')"><i class="fas fa-check"></i></a>' +
-		// '<a class="btn-floating btn-sm peach-gradient waves-effect waves-light text-white"><i class="fas fa-times"></i></a>' +
-		'<h6 class="h6 text-default">' + data.class_end_time + '</h6>' +
+		'<div class="col-6">' +
+		'<h6 class="h6 text-default">' + data.startTime + '</h6>';
+		switchReqHtml += respondedButton;
+		switchReqHtml +='<h6 class="h6 text-default">' + data.endTime + '</h6>' +
 		'</div>' +
 		'</div>' +
 		'</div></div><div class="clearfix"></div><br/>';
@@ -279,6 +300,9 @@ function getData(param, extraParam) {
 			console.log('param schedule',extraParam);
 			break;
 		case "switchRequest":
+			directory += '/coach/class/schedule/' + profile.accessToken;
+			break;
+		case "ongoingClass":
 			directory += '/coach/class/schedule/' + profile.accessToken;
 			break;
 	}
@@ -328,7 +352,7 @@ function getData(param, extraParam) {
 				"Content-Type": "application/json",
 				"Accept": "*/*",
 				"Cache-Control": "no-cache",
-				"param" :"all"
+				"filter" :"switchRequest"
 			},
 			timeout: 8000,
 			tryCount: 0,
@@ -350,6 +374,41 @@ function getData(param, extraParam) {
 						break;
 					case "200":
 						callback.data.forEach(appendSwitchRequest);
+						break;
+				}
+			}
+		})
+	} else if(param == 'ongoingClass'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"filter" :"startedClass"
+			},
+			timeout: 8000,
+			tryCount: 0,
+			retryLimit: 3,
+			success: function (callback) {
+				console.log('kembalian data filter started', callback);
+				switch (callback.responseCode) {
+					case "500":
+						this.tryCount++;
+						if (this.tryCount < this.retryLimit) {
+							$.ajax(this);
+						}
+						break;
+					case "401":
+						logout();
+						break;
+					case "404":
+						notification(500,'data not found');
+						break;
+					case "200":
+						callback.data.forEach(appendStartedClass);
 						break;
 				}
 			}
@@ -458,7 +517,7 @@ function getData(param, extraParam) {
 						break;
 					case "404":
 						let emptySchedule = '<h3>Empty Class History</h3>'
-						$('#scheduleHistory').append(emptySchedule);
+						$('#finishedClass').append(emptySchedule);
 						break;
 					case "200":
 						callback.data.forEach(appendClassHistory);
@@ -611,6 +670,35 @@ function appendScheduleByDate(data,index){
 	$('#classChoose').append(switchClassSchedule);
 }
 
+function appendStartedClass(data,index){
+	let startedTag = '<div class="card card-cascade wider mb-3" data-id='+data.class_id+'>'+
+		'<div class="card-body card-body-cascade text-center">'+
+			'<div class="row">'+
+				'<div class="col-12" style="padding:0px;">'+
+					'<table class="table table-borderless table-sm mb-0">'+
+						'<tbody>'+
+							'<tr>'+
+								'<td class="font-weight-normal align-middle">'+
+									'<span class="blue-text"><i class="fas fa-dumbbell fa-lg text-muted"></i>'+
+										'&nbsp;'+data.class_name+'</span>'+
+								'</td>'+
+								'<td class="font-weight-normal mr-3">'+
+									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_date).format('DD MMMM YYYY')+'</p>'+
+								'</td>'+
+								'<td class="font-weight-normal mr-3">'+
+									'<p class="mb-1 text-muted text-default">'+data.class_start_time+'</p>'+
+								'</td>'+
+							'</tr>'+
+						'</tbody>'+
+					'</table>'+
+				'</div>'+
+			'</div>'+
+		'</div>'+
+	'</div>'+
+	'<div class="clearfix"></div><br/>';
+	$('#ongoingClass').append(startedTag);
+}
+
 function appendClassHistory(data,index){
 	let tagHistory = '<div class="card card-cascade wider mb-3" data-id='+data.classId+'>'+
 		'<div class="card-body card-body-cascade text-center">'+
@@ -637,7 +725,7 @@ function appendClassHistory(data,index){
 		'</div>'+
 	'</div>'+
 	'<div class="clearfix"></div><br/>';
-	$('#scheduleHistory').append(tagHistory);
+	$('#finishedClass').append(tagHistory);
 }
 
 function appendDetailSchedule(data){
@@ -690,7 +778,6 @@ function postData(uri, target, dd) {
 				'Content-Type': 'application/json'
 			},
 			success: function (callback) {
-				alert(callback);
 				loadingDeactive();
 				switch (callback.responseCode) {
 					case "200":

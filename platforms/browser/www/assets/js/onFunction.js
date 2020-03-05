@@ -97,6 +97,98 @@ $(document).on('click','.switchSchedule',function(){
 	})
 })
 
+$(document).on('click','.accRequest',function(){
+	let profile = JSON.parse(localStorage.getItem('dataProfile'));
+	let directoryPass = urlService;
+	directoryPass += '/coach/switchClassResponse/' + profile.accessToken;
+	let accData = {
+		"switchId": parseInt($(this).attr('data-switch')),
+		"action" : "yes"
+	};
+	console.log('acc data',accData);
+	console.log('pass dir',directoryPass);
+	$.ajax({
+		url: directoryPass,
+		crossDomain: true,
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			"Accept": "*/*",
+			"Cache-Control": "no-cache",
+			"Accept-Encoding": "gzip, deflate",
+			"Connection": "keep-alive",
+		},
+		data : JSON.stringify(accData),
+		timeout: 8000,
+		success: function (callback) {
+			console.log('kembalian switch',callback);
+			switch (callback.responseCode) {
+				case "401":
+					logout();
+					break;
+				case "404":
+					notification(404,'data not found');
+					break;
+				case "200":
+					notification(200,'switch request has been accepted');
+					setTimeout(() => {
+						window.location.href = 'schedule.html';
+					}, 500);
+					break;
+				default:
+					notification(500,'internal server error');
+					break;
+			}
+		}
+	})
+})
+
+$(document).on('click','.rejectRequest',function(){
+	let profile = JSON.parse(localStorage.getItem('dataProfile'));
+	let directoryPass = urlService;
+	directoryPass += '/coach/switchClassResponse/' + profile.accessToken;
+	let rejectData = {
+		"switchId": parseInt($(this).attr('data-switch')),
+		"action":"no"
+	};
+	console.log('reject data',rejectData);
+	console.log('pass dir reject',directoryPass);
+	$.ajax({
+		url: directoryPass,
+		crossDomain: true,
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			"Accept": "*/*",
+			"Cache-Control": "no-cache",
+			"Accept-Encoding": "gzip, deflate",
+			"Connection": "keep-alive",
+		},
+		data : JSON.stringify(rejectData),
+		timeout: 8000,
+		success: function (callback) {
+			console.log('kembalian switch',callback);
+			switch (callback.responseCode) {
+				case "401":
+					logout();
+					break;
+				case "404":
+					notification(404,'data not found');
+					break;
+				case "200":
+					notification(200,'switch request has been declined');
+					setTimeout(() => {
+						window.location.href = 'schedule.html';
+					}, 500);
+					break;
+				default:
+					notification(500,'internal server error');
+					break;
+			}
+		}
+	})
+})
+
 
 $(document).on('submit','#imgProfile',(function(e) {
 	e.preventDefault();
