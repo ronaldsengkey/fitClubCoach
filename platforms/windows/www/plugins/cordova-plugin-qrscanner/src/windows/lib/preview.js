@@ -1,4 +1,4 @@
-﻿cordova.define("cordova-plugin-qrscanner.preview", function(require, exports, module) {
+cordova.define("cordova-plugin-qrscanner.preview", function(require, exports, module) {
 const urlutil = require('cordova/urlutil');
 
 let _ = {

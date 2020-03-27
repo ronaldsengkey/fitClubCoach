@@ -1,4 +1,4 @@
-﻿var urlService = 'http://192.168.0.47:8888/ronaldSengkey/fitClub/api/v1';
+﻿var urlService = 'http://192.168.192.10:8888/ronaldSengkey/fitClub/api/v1';
 // var urlService = 'http://localhost:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
@@ -22,6 +22,7 @@ $(function () {
 	}
 	if($('#addSchedulePage').length > 0){
 		validate('addSchedule');
+		validate('getPlace');
 	}
 	if($('#schedulePage').length > 0){
 		validate('listSchedule');
@@ -176,6 +177,9 @@ async function validate(param) {
 			case "switchSchedule":
 				putSwitchData();
 				break;
+			case "getPlace":
+				getPlace();
+				break;
 		}
 	} else {
 		// logout();
@@ -185,6 +189,10 @@ async function validate(param) {
 				break;
 		}
 	}
+}
+
+function getPlace(){
+	getData('placeList')
 }
 
 function getOngoingClass(){
@@ -213,6 +221,11 @@ function getScheduleDetail(){
 function appendSpecialization(data,index){
 	let specHtml = '<option value='+data.id+'>'+data.name+'</option>';
 	$('#classTrain').append(specHtml);
+}
+
+function appendGetPlaceSchedule(data,index){
+	let placeSchedule = '<option value='+data.id+'>'+data.name+'</option>';
+	$('#placeOption').append(placeSchedule);
 }
 
 function appendGetPlace(data,index){
@@ -256,14 +269,14 @@ function appendSwitchRequest(data,index){
 		'<h5 class="blue-text">' + data.className + '</h5></div>' +
 		'<div class="feed-footer">' +
 		'<div> by : ' + data.name + '</div>' +
-		'<div> on : ' + moment(data.requestDate).format('DD MMMM YYYY') + '</div>';
+		'<div> on : ' + moment(data.toStartDate).format('DD MMMM YYYY') + '</div>';
 		switchReqHtml += respondedText;
 		switchReqHtml += '<a class="like">' +
 		'</a></div></div></div></div>' +
 		'<div class="col-6">' +
-		'<h6 class="h6 text-default">' + data.startTime + '</h6>';
+		'<h6 class="h6 text-default"> start : ' + data.toStartTime + '</h6>';
 		switchReqHtml += respondedButton;
-		switchReqHtml +='<h6 class="h6 text-default">' + data.endTime + '</h6>' +
+		switchReqHtml +='<h6 class="h6 text-default"> end : ' + data.toEndTime + '</h6>' +
 		'</div>' +
 		'</div>' +
 		'</div></div><div class="clearfix"></div><br/>';
@@ -304,6 +317,9 @@ function getData(param, extraParam) {
 			break;
 		case "ongoingClass":
 			directory += '/coach/class/schedule/' + profile.accessToken;
+			break;
+		case "placeList":
+			directory += '/place/x';
 			break;
 	}
 	if(param == 'trainerRegist'){
@@ -378,6 +394,41 @@ function getData(param, extraParam) {
 				}
 			}
 		})
+	} else if(param == 'placeList'){
+		$.ajax({
+			url: directory,
+			crossDomain: true,
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"Accept": "*/*",
+				"Cache-Control": "no-cache",
+				"param" :"all"
+			},
+			timeout: 8000,
+			tryCount: 0,
+			retryLimit: 3,
+			success: function (callback) {
+				console.log('kembalian data place list', callback);
+				switch (callback.responseCode) {
+					case "500":
+						this.tryCount++;
+						if (this.tryCount < this.retryLimit) {
+							$.ajax(this);
+						}
+						break;
+					case "401":
+						logout();
+						break;
+					case "404":
+						notification(500,'data not found');
+						break;
+					case "200":
+						callback.data.forEach(appendGetPlaceSchedule);
+						break;
+				}
+			}
+		})
 	} else if(param == 'ongoingClass'){
 		$.ajax({
 			url: directory,
@@ -387,7 +438,7 @@ function getData(param, extraParam) {
 				"Content-Type": "application/json",
 				"Accept": "*/*",
 				"Cache-Control": "no-cache",
-				"filter" :"startedClass"
+				"classStatus" :"started"
 			},
 			timeout: 8000,
 			tryCount: 0,
@@ -405,7 +456,9 @@ function getData(param, extraParam) {
 						logout();
 						break;
 					case "404":
-						notification(500,'data not found');
+						// notification(500,'data not found');
+						let emptyOngoing = "<h3>You don't have any ongoing class right now</h3>"
+						$('#ongoingClass').append(emptyOngoing);
 						break;
 					case "200":
 						callback.data.forEach(appendStartedClass);
@@ -496,7 +549,7 @@ function getData(param, extraParam) {
 				"Content-Type": "application/json",
 				"Accept": "*/*",
 				"Cache-Control": "no-cache",
-				"param" :"all"
+				"classStatus" :"finished"
 			},
 			timeout: 8000,
 			tryCount: 0,
@@ -561,10 +614,14 @@ function getData(param, extraParam) {
 						console.log('ww',callback);
 						if(callback.data.action == 'started'){
 							$('#classSwitch').prop('checked',true);
+							$('#btnSwap').remove();
+							$('#btnScan').remove();
 						} else if(callback.data.action == null || callback.data.action == 'null'){
 							$('#classSwitch').prop('checked',false);
 						} else {
-							$('#classSwitch').attr('disabled',true)
+							$('#classSwitch').attr('disabled',true);
+							$('#btnSwap').remove();
+							$('#btnScan').remove();
 						}
 						appendDetailSchedule(callback.data);
 						break;
@@ -607,9 +664,7 @@ function getData(param, extraParam) {
 				"Content-Type": "application/json",
 				"Accept": "*/*",
 				"Cache-Control": "no-cache",
-				"Accept-Encoding": "gzip, deflate",
-				"Connection": "keep-alive",
-				"byClassId":extraParam
+				"classStatus" : "null",
 			},
 			timeout: 8000,
 			success: function (callback) {
@@ -618,7 +673,9 @@ function getData(param, extraParam) {
 						logout();
 						break;
 					case "404":
-						console.log('schedule',callback);
+						// console.log('schedule',callback);
+						let emptyScheduleNow = "<h3>You don't have any schedule</h3>"
+						$('.scheduleList').append(emptyScheduleNow);
 						break;
 					case "200":
 						console.log('schedule success',callback);
@@ -671,7 +728,7 @@ function appendScheduleByDate(data,index){
 }
 
 function appendStartedClass(data,index){
-	let startedTag = '<div class="card card-cascade wider mb-3" data-id='+data.class_id+'>'+
+	let startedTag = '<div class="card card-cascade wider mb-3 classSchedule" data-schedule='+data.scheduleId+' data-id='+data.class_id+' data-coach='+data.coach_account_id+'>'+
 		'<div class="card-body card-body-cascade text-center">'+
 			'<div class="row">'+
 				'<div class="col-12" style="padding:0px;">'+
