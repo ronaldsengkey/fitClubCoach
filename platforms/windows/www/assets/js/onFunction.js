@@ -6,7 +6,8 @@ $(document).on('click','.classSchedule',(function(e){
 	var oldScheduleId = $(this).data('schedule');
 	var thisClassId = $(this).data('id');
 	var oldCoachId = $(this).data('coach');
-	window.location.href="scheduleDetail.html?oldSchedId=" + oldScheduleId + '&coachId=' + oldCoachId + '&classId=' + thisClassId;
+	var statusClass = $(this).data('status');
+	window.location.href="scheduleDetail.html?oldSchedId=" + oldScheduleId + '&coachId=' + oldCoachId + '&classId=' + thisClassId + '&status=' + statusClass;
 }))
 
 $(document).on('click','.toSwitch',function(){
@@ -22,13 +23,16 @@ $(document).on('change','#classSwitchDate',(function(e){
 	console.log('ww',$(this).val());
 	var date = $(this).val();
 	getData('coachScheduleDate',date);
-	let switchClass = '<div class="row">'+
+	let switchClass = '<div class="row classSwitchOption">'+
 	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">'+
 		'<div class="clearfix"></div><br>'+
 		'<label><i class="fa fa-calendar"></i>&nbsp;Class</label>'+
 		'<select id="classChoose" class="form-control"><option selected></option></select>';
 		'</div>'+
 	'</div>';
+	if($('.classSwitchOption').length > 0){
+		$('.classSwitchOption').remove();
+	}
 	$('.classContain').append(switchClass);
 }));
 
@@ -119,7 +123,7 @@ $(document).on('click','.accRequest',function(){
 			"Connection": "keep-alive",
 		},
 		data : JSON.stringify(accData),
-		timeout: 8000,
+		timeout: 15000,
 		success: function (callback) {
 			console.log('kembalian switch',callback);
 			switch (callback.responseCode) {
@@ -358,7 +362,7 @@ $(document).on('click','button, a',function(){
 				data = {'filter':'coach','name':$('#name').val(),'address':$('#address').val(),'phone':$('#phone').val(),'gender':parseInt($('select#gender').val()),'email':$('#email').val(),'password':$('#password').val(),
 				'specialization':$('select#classTrain').val(),'placeId':$('select#placeId').val()};
 			} else if(filter == 'coachSchedule'){
-				data = {"coachId":userDataOnFunction.id,"classId":parseInt($('select#classOptionList').val()),"placeId":parseInt($('select#placeOption').val()),"startDate":$('#classDate').val(),"endDate":$('#classDate').val(),"startTime":$('#startTime').val(),"endTime":$('#endTime').val()}
+				data = {"coachId":userDataOnFunction.coachId,"classId":parseInt($('select#classOptionList').val()),"placeId":parseInt($('select#placeOption').val()),"startDate":$('#classDate').val(),"endDate":$('#classDate').val(),"startTime":$('#startTime').val(),"endTime":$('#endTime').val()}
 				console.log('data schedule',data);
 				// window.location.href="home.html";
 			}
@@ -385,7 +389,9 @@ $(document).on('click','button, a',function(){
 			console.log("check data =>", JSON.stringify(data));
 			postData(uri,target,data);
 		} else if(uri == 'view'){
-			
+			if(filter == 'profile' && target == 'profile'){
+				window.location.href='profile.html';
+			}	
 		}
 		
 	}

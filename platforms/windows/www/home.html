@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -51,7 +51,6 @@ width:100%;height:100%; opacity: 0.8;">
 			<nav class="navbar navbar-dark navbar-2 purple-gradient col-12">
 
 				<!-- Navbar brand -->
-				<a class="navbar-brand" data-target="index" data-uri="read" data-filter="index">Logout</a>
 				<center>
 					<h5 class="text-white">Home</h5>
 				</center>
@@ -77,6 +76,9 @@ width:100%;height:100%; opacity: 0.8;">
 							<a class="nav-link waves-effect waves-light" href="#"><i
 									class="fas fa-cog"></i>&nbsp;Setting</a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link waves-effect waves-light" href="#" data-target="index" data-uri="read" data-filter="index"><i class="fas fa-lock"></i>&nbsp;Logout</a>
+						</li>
 					</ul>
 					<!-- Links -->
 
@@ -101,16 +103,28 @@ width:100%;height:100%; opacity: 0.8;">
 			<div style="width:90%;margin:0px auto;margin-top:-9%;z-index:3;">
 				<img src="https://uploads-ssl.webflow.com/5d1f053cee3b9da3d699a858/5d2aaced187e9368f0c098c9_gym.svg"
 					class="mt-5" style="width:55%">
-				<div class="rowM">
+				<!-- <div class="rowM">
 					<div class="colM s12">
-						<ul id="tabs-swipe" class="tabs">
+						<ul id="tabs-swipe" class="tabs tabs-fixed-width tab-demo z-depth-1">
 							<li class="tab col-lg-6"><a href="#ongoingClass">Ongoing Class</a></li>
 							<li class="tab col-lg-6"><a href="#finishedClass">Finished Class</a></li>
 						</ul>
 					</div>
 					<div id="ongoingClass" class="col-lg-6 mt-3"></div>	
 					<div id="finishedClass" class="col-lg-6 mt-3"></div>
-				</div>
+				</div> -->
+				<!-- <ul id="tabs-swipe" class="tabs tabs-fixed-width tab-demo z-depth-1">
+					<li class="tab col-lg-6"><a href="#ongoingClass">Ongoing Class</a></li>
+					<li class="tab col-lg-6"><a href="#finishedClass">Finished Class</a></li>
+				</ul>
+				<div id="ongoingClass" class="col-lg-6 mt-3"></div>	
+				<div id="finishedClass" class="col-lg-6 mt-3"></div> -->
+				<ul class="tabs tabs-fixed-width" id="tabs-swipe">
+					<li class="tab"><a href="#ongoingClass">Ongoing Class</a></li>
+					<li class="tab"><a href="#finishedClass">Finished Class</a></li>
+				  </ul>
+				  <div id="ongoingClass" class="col s12 mt-3"></div>
+				  <div id="finishedClass" class="col s12 mt-3"></div>
 			</div>
 		</div>
 		<div style="position:fixed;z-index:999;width:100%;bottom:0px;right:0px;left:0px;">

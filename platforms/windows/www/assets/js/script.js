@@ -12,6 +12,9 @@ $(function () {
 	if ($('#loginPage').length > 0) {
 		validate('login');
 	}
+	if ($('#profilePage').length > 0) {
+		validate('profile');
+	}
 	if ($('#registerPage').length > 0) {
 		validate();
 		select2Activated();
@@ -37,7 +40,7 @@ $(function () {
 	if($('#homeCoachPage').length > 0){
 		validate('classHistory');
 		validate('ongoingClass');
-		$('.tabs').tabs({
+		$('#tabs-swipe').tabs({
 			swipeable : true
 		});
 	}
@@ -180,6 +183,9 @@ async function validate(param) {
 			case "getPlace":
 				getPlace();
 				break;
+			case "profile":
+				appendProfile(dataProfile)
+				break;
 		}
 	} else {
 		// logout();
@@ -213,8 +219,10 @@ function getScheduleDetail(){
 	console.log('ww',classId);
 	let coachOldId = searchParams.get('coachId');
 	let schedOldId = searchParams.get('oldSchedId');
+	let classSetatus = searchParams.get('status');
 	$('#schedId').val(schedOldId);
 	$('#oldCoachId').val(coachOldId);
+	$('#status').val(classSetatus);
 	getData('classDetail',classId);
 }
 
@@ -257,7 +265,7 @@ function appendSwitchRequest(data,index){
 		respondedButton += '<a class="btn-floating btn-xs purple-gradient waves-effect waves-light text-white accRequest" data-switch='+data.id+'><i class="fas fa-check"></i></a>' +
 		'<a class="btn-floating btn-xs peach-gradient waves-effect waves-light text-white rejectRequest" data-switch='+data.id+'><i class="fas fa-times"></i></a>';
 	} else {
-		respondedText += '<div> your respon : ' + data.status + '</div>';
+		respondedText += '<br/><div> your respon : ' + data.status + '</div>';
 	}
 	let switchReqHtml = '<div class="card card-cascade wider">' +
 		'<div class="card-body card-body-cascade text-center">' +
@@ -269,18 +277,29 @@ function appendSwitchRequest(data,index){
 		'<h5 class="blue-text">' + data.className + '</h5></div>' +
 		'<div class="feed-footer">' +
 		'<div> by : ' + data.name + '</div>' +
-		'<div> on : ' + moment(data.toStartDate).format('DD MMMM YYYY') + '</div>';
+		'<div> on : ' + moment(data.fromStartDate).format('DD MMMM YYYY') + '</div><br/>'+
+		'<h5 class="blue-text"> To your </h5> <div> class : '+data.toClassName+' </div> on : ' + moment(data.toStartDate).format('DD MMMM YYYY') +
+		// '<h5 class="blue-text"> To your schedule on : </h5>' + moment(data.toStartDate).format('DD MMMM YYYY') +
+		'<div> at : ' + data.toStartTime + '</div>'+
+		'<div> until : ' + data.toEndTime + '</div>';
 		switchReqHtml += respondedText;
 		switchReqHtml += '<a class="like">' +
 		'</a></div></div></div></div>' +
-		'<div class="col-6">' +
-		'<h6 class="h6 text-default"> start : ' + data.toStartTime + '</h6>';
+		'<div class="col-6" style="align-self:center">' +
+		'<h6 class="h6 text-default"> start : ' + data.fromStartTime + '</h6>';
 		switchReqHtml += respondedButton;
-		switchReqHtml +='<h6 class="h6 text-default"> end : ' + data.toEndTime + '</h6>' +
+		switchReqHtml +='<h6 class="h6 text-default"> end : ' + data.fromEndTime + '</h6>' +
 		'</div>' +
 		'</div>' +
 		'</div></div><div class="clearfix"></div><br/>';
 	$('#switchRequestData').append(switchReqHtml);
+}
+
+function appendProfile(dataProfile){
+	$('#profName').append(dataProfile.name);
+	$('#profAddr').append(dataProfile.address);
+	$('#profEmail').append(dataProfile.email);
+	$('#profPhone').append(dataProfile.phone);
 }
 
 function getData(param, extraParam) {
@@ -300,6 +319,7 @@ function getData(param, extraParam) {
 			directory += '/coach/class/schedule/' + profile.accessToken;
 			break;
 		case "classDetail":
+			console.log('sched id',extraParam);
 			directory += '/class/detail/' + profile.accessToken + '/' + extraParam;
 			break;
 		case "classHistory":
@@ -612,17 +632,25 @@ function getData(param, extraParam) {
 					case "200":
 						// callback.data.forEach(appendGetPlace);
 						console.log('ww',callback);
-						if(callback.data.action == 'started'){
+						if($('#status').val() == 'null'){
+							$('#classSwitch').prop('checked',false);
+						} else if($('#status').val() == 'started'){
 							$('#classSwitch').prop('checked',true);
 							$('#btnSwap').remove();
 							$('#btnScan').remove();
-						} else if(callback.data.action == null || callback.data.action == 'null'){
-							$('#classSwitch').prop('checked',false);
-						} else {
-							$('#classSwitch').attr('disabled',true);
-							$('#btnSwap').remove();
-							$('#btnScan').remove();
-						}
+						} 
+
+						// if(callback.data.action == 'started'){
+						// 	$('#classSwitch').prop('checked',true);
+						// 	$('#btnSwap').remove();
+						// 	$('#btnScan').remove();
+						// } else if(callback.data.action == null || callback.data.action == 'null'){
+						// 	$('#classSwitch').prop('checked',false);
+						// } else {
+						// 	$('#classSwitch').attr('disabled',true);
+						// 	$('#btnSwap').remove();
+						// 	$('#btnScan').remove();
+						// }
 						appendDetailSchedule(callback.data);
 						break;
 				}
@@ -723,12 +751,12 @@ function getData(param, extraParam) {
 }
 
 function appendScheduleByDate(data,index){
-	let switchClassSchedule = '<option value='+data.coachName+' data-schedId="'+data.scheduleId+'" data-coachId='+data.coachId+' data-class='+data.classId+'>'+data.className+' - '+data.startTime+'</option>'
+	let switchClassSchedule = '<option value="'+data.coachName+'" data-schedId="'+data.scheduleId+'" data-coachId='+data.coachId+' data-class='+data.classId+'>'+data.className+' - '+data.startTime+'</option>'
 	$('#classChoose').append(switchClassSchedule);
 }
 
 function appendStartedClass(data,index){
-	let startedTag = '<div class="card card-cascade wider mb-3 classSchedule" data-schedule='+data.scheduleId+' data-id='+data.class_id+' data-coach='+data.coach_account_id+'>'+
+	let startedTag = '<div class="card card-cascade wider mb-3 classSchedule" data-status="started" data-schedule='+data.scheduleId+' data-id='+data.class_id+' data-coach='+data.coach_id+'>'+
 		'<div class="card-body card-body-cascade text-center">'+
 			'<div class="row">'+
 				'<div class="col-12" style="padding:0px;">'+
@@ -739,11 +767,13 @@ function appendStartedClass(data,index){
 									'<span class="blue-text"><i class="fas fa-dumbbell fa-lg text-muted"></i>'+
 										'&nbsp;'+data.class_name+'</span>'+
 								'</td>'+
-								'<td class="font-weight-normal mr-3">'+
+								'<td class="font-weight-normal mr-3 align-middle">'+
 									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_date).format('DD MMMM YYYY')+'</p>'+
 								'</td>'+
 								'<td class="font-weight-normal mr-3">'+
 									'<p class="mb-1 text-muted text-default">'+data.class_start_time+'</p>'+
+									'<p class="mb-1 text-muted text-default">-</p>'+
+									'<span class="text-default">'+data.class_end_time+'</span>'+
 								'</td>'+
 							'</tr>'+
 						'</tbody>'+
@@ -768,11 +798,13 @@ function appendClassHistory(data,index){
 									'<span class="blue-text"><i class="fas fa-dumbbell fa-lg text-muted"></i>'+
 										'&nbsp;'+data.className+'</span>'+
 								'</td>'+
-								'<td class="font-weight-normal mr-3">'+
+								'<td class="font-weight-normal mr-3 align-middle">'+
 									'<p class="mb-1 text-muted text-default">'+moment(data.startDate).format('DD MMMM YYYY')+'</p>'+
 								'</td>'+
 								'<td class="font-weight-normal mr-3">'+
 									'<p class="mb-1 text-muted text-default">'+data.startTime+'</p>'+
+									'<p class="mb-1 text-muted text-default">-</p>'+
+									'<span class="text-default">'+data.endTime+'</span>'+
 								'</td>'+
 							'</tr>'+
 						'</tbody>'+
@@ -791,7 +823,7 @@ function appendDetailSchedule(data){
 }
 
 function appendScheduleData(data,index){
-	let tagSchedule = '<div class="card card-cascade wider mb-3 classSchedule" data-schedule='+data.scheduleId+' data-id='+data.class_id+' data-coach='+data.coach_account_id+'>'+
+	let tagSchedule = '<div class="card card-cascade wider mb-3 classSchedule" data-status="null" data-schedule='+data.scheduleId+' data-id='+data.class_id+' data-coach='+data.coach_account_id+'>'+
 		'<div class="card-body card-body-cascade text-center">'+
 			'<div class="row">'+
 				'<div class="col-12" style="padding:0px;">'+
@@ -802,11 +834,13 @@ function appendScheduleData(data,index){
 									'<span class="blue-text"><i class="fas fa-dumbbell fa-lg text-muted"></i>'+
 										'&nbsp;'+data.class_name+'</span>'+
 								'</td>'+
-								'<td class="font-weight-normal mr-3">'+
+								'<td class="font-weight-normal mr-3 align-middle">'+
 									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_date).format('DD MMMM YYYY')+'</p>'+
 								'</td>'+
 								'<td class="font-weight-normal mr-3">'+
 									'<p class="mb-1 text-muted text-default">'+data.class_start_time+'</p>'+
+									'<p class="mb-1 text-muted text-default">-</p>'+
+									'<span class="text-default">'+data.class_end_time+'</span>'+
 								'</td>'+
 							'</tr>'+
 						'</tbody>'+

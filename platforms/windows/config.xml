@@ -4,7 +4,7 @@
     <feature name="QRScanner">
         <param name="windows-package" value="QRScanner" />
     </feature>
-    <name>fitClub</name>
+    <name>fitClubCoach</name>
     <description>
         Hello World sample application that responds to the deviceready event.
     </description>

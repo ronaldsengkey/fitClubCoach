@@ -3,7 +3,7 @@
     <Identity Name="com.fitclub.dev" Publisher="CN=$username$" Version="1.0.0.0" />
     <mp:PhoneIdentity PhoneProductId="a45de910-8fe9-11e8-a2e3-351efdf1865f" PhonePublisherId="db093ed5-53b1-45f7-af72-751e8f36ab80" />
     <Properties>
-        <DisplayName>fitClub</DisplayName>
+        <DisplayName>fitClubCoach</DisplayName>
         <PublisherDisplayName>PhoneGap Team</PublisherDisplayName>
         <Logo>images\StoreLogo.png</Logo>
         <Description>Hello World sample application that responds to the deviceready event.</Description>
@@ -17,7 +17,7 @@
     </Resources>
     <Applications>
         <Application Id="com.fitclub.dev" StartPage="www/index.html">
-            <m3:VisualElements BackgroundColor="transparent" Description="Hello World sample application that responds to the deviceready event." DisplayName="fitClub" ForegroundText="light" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
+            <m3:VisualElements BackgroundColor="transparent" Description="Hello World sample application that responds to the deviceready event." DisplayName="fitClubCoach" ForegroundText="light" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
                 <m3:DefaultTile Square71x71Logo="images\Square71x71Logo.png" Wide310x150Logo="images\Wide310x150Logo.png">
                     <m3:ShowNameOnTiles>
                         <m3:ShowOn Tile="square150x150Logo" />
@@ -32,8 +32,8 @@
         </Application>
     </Applications>
     <Capabilities>
-        <m3:Capability Name="contacts" />
         <Capability Name="internetClientServer" />
+        <m3:Capability Name="contacts" />
         <DeviceCapability Name="webcam" />
     </Capabilities>
 </Package>

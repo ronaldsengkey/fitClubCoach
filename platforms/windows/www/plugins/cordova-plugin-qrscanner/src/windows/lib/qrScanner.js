@@ -1,4 +1,4 @@
-cordova.define("cordova-plugin-qrscanner.qrScanner", function(require, exports, module) {
+﻿cordova.define("cordova-plugin-qrscanner.qrScanner", function(require, exports, module) {
 const preview = require('./preview');
 const barcodeReader = new QRReader.Reader();
 const VideoCapture = QRReader.VideoCapture;

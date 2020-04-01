@@ -3,7 +3,7 @@
     <Identity Name="com.fitclub.dev" Publisher="CN=$username$" Version="1.0.0.0" />
     <mp:PhoneIdentity PhoneProductId="a45de910-8fe9-11e8-a2e3-351efdf1865f" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
     <Properties>
-        <DisplayName>fitClub</DisplayName>
+        <DisplayName>fitClubCoach</DisplayName>
         <PublisherDisplayName>PhoneGap Team</PublisherDisplayName>
         <Logo>images\StoreLogo.png</Logo>
         <Description>Hello World sample application that responds to the deviceready event.</Description>
@@ -16,7 +16,7 @@
     </Resources>
     <Applications>
         <Application Id="com.fitclub.dev" StartPage="ms-appx-web://com.fitclub.dev/www/index.html">
-            <uap:VisualElements BackgroundColor="#464646" Description="Hello World sample application that responds to the deviceready event." DisplayName="fitClub" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
+            <uap:VisualElements BackgroundColor="#464646" Description="Hello World sample application that responds to the deviceready event." DisplayName="fitClubCoach" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
                 <uap:SplashScreen Image="images\splashscreen.png" />
                 <uap:DefaultTile ShortName="fitClub" Square310x310Logo="images\Square310x310Logo.png" Square71x71Logo="images\Square71x71Logo.png" Wide310x150Logo="images\Wide310x150Logo.png" />
                 <uap:InitialRotationPreference>
@@ -29,8 +29,8 @@
         </Application>
     </Applications>
     <Capabilities>
-        <uap:Capability Name="contacts" />
         <Capability Name="internetClient" />
+        <uap:Capability Name="contacts" />
         <DeviceCapability Name="webcam" />
     </Capabilities>
 </Package>
