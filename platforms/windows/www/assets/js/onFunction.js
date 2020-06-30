@@ -123,7 +123,7 @@ $(document).on('click','.accRequest',function(){
 			"Connection": "keep-alive",
 		},
 		data : JSON.stringify(accData),
-		timeout: 15000,
+		timeout: 30000,
 		success: function (callback) {
 			console.log('kembalian switch',callback);
 			switch (callback.responseCode) {
@@ -169,7 +169,7 @@ $(document).on('click','.rejectRequest',function(){
 			"Connection": "keep-alive",
 		},
 		data : JSON.stringify(rejectData),
-		timeout: 8000,
+		timeout: 30000,
 		success: function (callback) {
 			console.log('kembalian switch',callback);
 			switch (callback.responseCode) {
