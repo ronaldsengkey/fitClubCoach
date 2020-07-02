@@ -1,4 +1,4 @@
-﻿var urlService = 'http://c3cfbc8ba471.ngrok.io/ronaldSengkey/fitClub/api/v1';
+﻿var urlService = 'https://169400dbb26d.ngrok.io/ronaldSengkey/fitClub/api/v1';
 // var urlService = 'http://localhost:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
