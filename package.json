@@ -1,7 +1,7 @@
 {
-  "name": "fitclub",
-  "version": "1.0.0",
-  "description": "your fit partner",
+  "name": "fitclubcoach",
+  "version": "5.0.0",
+  "description": "your fit coach partner",
   "main": "index.js",
   "scripts": {
     "test": "hello member"
@@ -10,6 +10,7 @@
     "fitness",
     "fitclub",
     "fit",
+    "coach",
     "healthy",
     "club"
   ],
