@@ -1,5 +1,5 @@
 ﻿// var urlService = 'https://c52e81e2ee30.ngrok.io/ronaldSengkey/fitClub/api/v1';
-var urlService = 'http://localhost:8888/ronaldSengkey/fitClub/api/v1';
+var urlService = 'http://192.168.0.24:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
 var fieldPswdInput = '<input type="password" class="form-control fieldPswd">';
@@ -280,15 +280,15 @@ function appendSwitchRequest(data,index){
 		'<div> on : ' + moment(data.fromStartDate).format('DD MMMM YYYY') + '</div><br/>'+
 		'<h5 class="blue-text"> To your </h5> <div> class : '+data.toClassName+' </div> on : ' + moment(data.toStartDate).format('DD MMMM YYYY') +
 		// '<h5 class="blue-text"> To your schedule on : </h5>' + moment(data.toStartDate).format('DD MMMM YYYY') +
-		'<div> at : ' + data.toStartTime + '</div>'+
-		'<div> until : ' + data.toEndTime + '</div>';
+		'<div> at : ' + moment(data.toStartTime, "HH:mm:ss").format('HH:mm') + '</div>'+
+		'<div> until : ' + moment(data.toEndTime, "HH:mm:ss").format('HH:mm') + '</div>';
 		switchReqHtml += respondedText;
 		switchReqHtml += '<a class="like">' +
 		'</a></div></div></div></div>' +
 		'<div class="col-6" style="align-self:center">' +
-		'<h6 class="h6 text-default"> start : ' + data.fromStartTime + '</h6>';
+		'<h6 class="h6 text-default"> start : ' + moment(data.fromStartTime, "HH:mm:ss").format('HH:mm') + '</h6>';
 		switchReqHtml += respondedButton;
-		switchReqHtml +='<h6 class="h6 text-default"> end : ' + data.fromEndTime + '</h6>' +
+		switchReqHtml +='<h6 class="h6 text-default"> end : ' + moment(data.fromEndTime, "HH:mm:ss").format('HH:mm') + '</h6>' +
 		'</div>' +
 		'</div>' +
 		'</div></div><div class="clearfix"></div><br/>';
@@ -770,10 +770,10 @@ function appendStartedClass(data,index){
 								'<td class="font-weight-normal mr-3 align-middle">'+
 									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_date).format('DD MMMM YYYY')+'</p>'+
 								'</td>'+
-								'<td class="font-weight-normal mr-3">'+
-									'<p class="mb-1 text-muted text-default">'+data.class_start_time+'</p>'+
-									'<p class="mb-1 text-muted text-default">-</p>'+
-									'<span class="text-default">'+data.class_end_time+'</span>'+
+								'<td class="font-weight-normal mr-3" align-center>'+
+									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_time, "HH:mm:ss").format('HH:mm')+' - ' + moment(data.class_end_time, "HH:mm:ss").format('HH:mm') +'</p>'+
+									// '<p class="mb-1 text-muted text-default">-</p>'+
+									// '<span class="text-default">'+data.class_end_time+'</span>'+
 								'</td>'+
 							'</tr>'+
 						'</tbody>'+
@@ -801,10 +801,10 @@ function appendClassHistory(data,index){
 								'<td class="font-weight-normal mr-3 align-middle">'+
 									'<p class="mb-1 text-muted text-default">'+moment(data.startDate).format('DD MMMM YYYY')+'</p>'+
 								'</td>'+
-								'<td class="font-weight-normal mr-3">'+
-									'<p class="mb-1 text-muted text-default">'+data.startTime+'</p>'+
-									'<p class="mb-1 text-muted text-default">-</p>'+
-									'<span class="text-default">'+data.endTime+'</span>'+
+								'<td class="font-weight-normal mr-3" align-center>'+
+									'<p class="mb-1 text-muted text-default">'+moment(data.startTime, "HH:mm:ss").format('HH:mm')+' - ' + moment(data.endTime, "HH:mm:ss").format('HH:mm') +'</p>'+
+									// '<p class="mb-1 text-muted text-default">-</p>'+
+									// '<span class="text-default">'+data.endTime+'</span>'+
 								'</td>'+
 							'</tr>'+
 						'</tbody>'+
@@ -837,10 +837,10 @@ function appendScheduleData(data,index){
 								'<td class="font-weight-normal mr-3 align-middle">'+
 									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_date).format('DD MMMM YYYY')+'</p>'+
 								'</td>'+
-								'<td class="font-weight-normal mr-3">'+
-									'<p class="mb-1 text-muted text-default">'+data.class_start_time+'</p>'+
-									'<p class="mb-1 text-muted text-default">-</p>'+
-									'<span class="text-default">'+data.class_end_time+'</span>'+
+								'<td class="font-weight-normal mr-3" style="align-self:center;">'+
+									'<p class="mb-1 text-muted text-default">'+moment(data.class_start_time, "HH:mm:ss").format('HH:mm')+' - '+ moment(data.class_end_time, "HH:mm:ss").format('HH:mm') +'</p>'+
+									// '<p class="mb-1 text-muted text-default">-</p>'+
+									// '<span class="text-default">'+data.class_end_time+'</span>'+
 								'</td>'+
 							'</tr>'+
 						'</tbody>'+
