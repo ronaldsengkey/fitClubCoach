@@ -1,5 +1,5 @@
-﻿var urlService = 'http://c3cfbc8ba471.ngrok.io/ronaldSengkey/fitClub/api/v1';
-// var urlService = 'http://localhost:8888/ronaldSengkey/fitClub/api/v1';
+﻿// var urlService = 'https://c52e81e2ee30.ngrok.io/ronaldSengkey/fitClub/api/v1';
+var urlService = 'http://localhost:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
 var fieldPswdInput = '<input type="password" class="form-control fieldPswd">';
@@ -339,7 +339,7 @@ function getData(param, extraParam) {
 			directory += '/coach/class/schedule/' + profile.accessToken;
 			break;
 		case "placeList":
-			directory += '/place/x';
+			directory += '/place';
 			break;
 	}
 	if(param == 'trainerRegist'){
