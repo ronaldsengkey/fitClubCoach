@@ -231,4 +231,20 @@ width:100%;height:100%; opacity: 0.8;">
 	});
 </script>
 
+<script type="text/javascript">
+	// function listener cordova
+	document.addEventListener("deviceready", onDeviceReady, false);
+
+	function onDeviceReady() {
+		document.addEventListener("backbutton", onBackKeyDown, false);
+		// document.getElementById("consignmentNote").addEventListener("click", dialogConfirm);
+		// window.addEventListener("orientationchange",updateOrientation);
+	}
+
+	function onBackKeyDown() {
+		window.location = "index.html";
+	}
+	// End function Listener cordova
+</script>
+
 </html>

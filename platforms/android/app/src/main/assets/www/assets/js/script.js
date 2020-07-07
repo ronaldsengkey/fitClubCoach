@@ -1,5 +1,5 @@
 ﻿// var urlService = 'http://fitclubdev.zapto.org:8888/ronaldSengkey/fitClub/api/v1';
-var urlService = 'http://192.168.0.13:8888/ronaldSengkey/fitClub/api/v1';
+var urlService = 'http://localhost:8888/ronaldSengkey/fitClub/api/v1';
 var fieldTextInput = '<input type="text" class="form-control fieldText">';
 var fieldEmailInput = '<input type="email" class="form-control fieldEmail">';
 var fieldPswdInput = '<input type="password" class="form-control fieldPswd">';

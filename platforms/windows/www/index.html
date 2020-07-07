@@ -153,14 +153,7 @@
         }
 
         function onBackKeyDown() {
-            var url = window.location.href.replace(/^.*[\\\/]/, '');
-            if (url == "index.html") {
-                navigator.app.exitApp();
-            } else {
-                window.location = "register.html";
-            }
-
-            // navigator.app.exitApp();
+            navigator.app.exitApp();
         }
         // End function Listener cordova
     </script>

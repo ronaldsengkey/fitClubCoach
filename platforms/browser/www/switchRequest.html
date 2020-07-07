@@ -139,4 +139,20 @@ width:100%;height:100%; opacity: 0.8;">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="assets/js/onFunction.js"></script>
 
+<script type="text/javascript">
+	// function listener cordova
+	document.addEventListener("deviceready", onDeviceReady, false);
+
+	function onDeviceReady() {
+		document.addEventListener("backbutton", onBackKeyDown, false);
+		// document.getElementById("consignmentNote").addEventListener("click", dialogConfirm);
+		// window.addEventListener("orientationchange",updateOrientation);
+	}
+
+	function onBackKeyDown() {
+		window.location = "index.html";
+	}
+	// End function Listener cordova
+</script>
+
 </html>
