@@ -362,7 +362,7 @@ $(document).on('click','button, a',function(){
 				data = {'filter':'coach','name':$('#name').val(),'address':$('#address').val(),'phone':$('#phone').val(),'gender':parseInt($('select#gender').val()),'email':$('#email').val(),'password':$('#password').val(),
 				'specialization':$('select#classTrain').val(),'placeId':$('select#placeId').val()};
 			} else if(filter == 'coachSchedule'){
-				data = {"coachId":userDataOnFunction.coachId,"classId":parseInt($('select#classOptionList').val()),"placeId":parseInt($('select#placeOption').val()),"startDate":$('#classDate').val(),"endDate":$('#classDate').val(),"startTime":$('#startTime').val(),"endTime":$('#endTime').val(),"maxPerson":$('#maxPerson').val()}
+				data = {"coachId":userDataOnFunction.coachId,"classId":parseInt($('select#classOptionList').val()),"placeId":parseInt($('select#placeOption').val()),"startDate":$('#classDate').val(),"endDate":$('#classDate').val(),"startTime":$('#startTime').val(),"endTime":$('#endTime').val(),"maxPerson":parseInt($('#maxPerson').val())}
 				console.log('data schedule',data);
 				// window.location.href="home.html";
 			}
