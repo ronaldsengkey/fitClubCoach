@@ -397,6 +397,12 @@ $(document).on('click','button, a',function(){
 	}
 });
 
+$(document).on('click','.openOTP',async function(){
+	let content = '<input type="text" class="form-control" id="otpCode">' +
+		"<b><small style='color:#fff;'>Your verification code has been send in your email address, Please check your email, and verify your account</small></b>"
+	callModal(content);
+})
+
 
 function parseUserData(){
 	let dataProfile = JSON.parse(localStorage.getItem("dataProfile"));
